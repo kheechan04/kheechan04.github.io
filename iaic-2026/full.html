@@ -670,9 +670,11 @@
       쓰는 게 특징이다.
     </p>
     <p>
-      GitHub <code>kvara66/IAIC</code> 저장소에 이 코드가 <code>noar_big</code>과
-      <code>noar_big_t</code> 두 브랜치로 나뉘어 있고, 팀원들이 각자 다른 브랜치로 학습시켰다. 직접
-      diff해보니 <b>유일한 차이는 ActionMLP 입력</b>이다 — <code>noar_big</code>은
+      GitHub <code>kvara66/IAIC</code> 저장소엔 이 계열 코드가 여러 브랜치로 갈라져 있다 —
+      <code>noar_big</code>, <code>noar_big_t</code> 외에 준호가 진행한 <code>noar_seq</code>
+      등도 있다(그쪽 결과는 확인 못함). 이 비교에 해당하는 건 그중 <code>noar_big</code>과
+      <code>noar_big_t</code> 두 개다. 직접 diff해보니 <b>유일한 차이는 ActionMLP 입력</b>이다 —
+      <code>noar_big</code>은
       <code>[state_0, state_i]</code>(12차원, 관절 위치만), <code>noar_big_t</code>는
       <code>[state_0, state_i, t/15]</code>(13차원, 정규화된 타임스텝 <code>t/15</code>까지 추가) —
       나머지 UNet 구조·VAE·학습 루프는 완전히 동일하다. <b>병근은 <code>noar_big</code>(타임스텝
