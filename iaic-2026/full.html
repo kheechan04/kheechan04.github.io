@@ -208,7 +208,7 @@
       <div class="toc-panel">
         <a href="#overview"><span class="n">00</span> 대회 개요 &amp; 최종 결과</a>
         <a href="#track-ctrlworld"><span class="n">01</span> Ctrl-World 파인튜닝</a>
-        <a href="#track-flow"><span class="n">02</span> delta 연장 + flow 아키텍처</a>
+        <a href="#track-flow"><span class="n">02</span> delta + flow 아키텍처</a>
         <a href="#cross"><span class="n">03</span> 두 트랙을 관통하는 발견</a>
         <a href="#closing"><span class="n">04</span> 마무리 소회</a>
         <a href="#team-bg"><span class="n">부록</span> 팀 배경 (펼쳐보기)</a>
@@ -225,7 +225,7 @@
     <h1>로봇팔 하나, 미래 16프레임,<br>세 번의 서로 다른 시도</h1>
     <p class="lede">
       2026 인하 인공지능 챌린지 — 로봇 미래 행동 영상 생성(월드 모델 챌린지)에서 내가 개인적으로
-      진행한 두 트랙(Ctrl-World 파인튜닝, delta 연장·flow 아키텍처 실험)의 전체 기록이다. 시도한 방법,
+      진행한 두 트랙(Ctrl-World 파인튜닝, delta·flow 아키텍처 실험)의 전체 기록이다. 시도한 방법,
       막힌 지점, 원인을 규명해나간 과정, 그리고 그 과정에서 배운 것을 나중에 다시 펼쳐봤을 때 전부
       기억나도록 최대한 자세히 남겨둔다. 본문(1~4장)은 전부 개인 기여만 담았고, 팀이 병행한 다른
       트랙(baseline, AR 구조 실험)은 맨 아래 <a href="#team-bg">부록</a>에 접어뒀다 — 내 성과로
@@ -258,7 +258,7 @@
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">08-07</div><div class="tl-label">Ctrl-World 컴플라이언스<br>자기발견·롤백 + 2차 재제출</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">08-09</div><div class="tl-label">submission_kit 중복실행<br>lock 가드 영구도입</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">08-11</div><div class="tl-label">Ctrl-World 3차 완료<br>최종 제출</div></div>
-        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">08-15~18</div><div class="tl-label">delta 연장 + flow<br>아키텍처 실험</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">08-15~18</div><div class="tl-label">delta + flow<br>아키텍처 실험</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">08-20</div><div class="tl-label">대회 종료</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-03</div><div class="tl-label">순위 발표<br>6 / 41</div></div>
       </div>
@@ -646,18 +646,19 @@
   <section class="track" id="track-flow">
     <div class="track-head">
       <span class="eyebrow chip chip-personal" style="display:inline-flex">개인 기여 · 희찬</span>
-      <h2>delta 연장 학습 + flow 아키텍처 실험</h2>
+      <h2>delta 학습 + flow 아키텍처 실험</h2>
       <p class="desc">
-        팀원(승원)의 delta 체크포인트를 이어받아 개인적으로 한 실험이 두 개 들어 있다 — 학습을 더
-        시켜본 것, 그리고 아키텍처 자체를 바꿔본 것. 둘 다 개인 저장소
-        <code>kheechan04/iaic-noar-big-t-flow</code>에 있다. 이 저장소를 "flow 실험"으로만 부르면
-        delta 연장 실험이 묻히니, 두 가지를 함께 다룬다.
+        승원이 만든 delta 베이스 코드로, 본인이 직접 처음부터 학습시킨 실험이 두 개 들어 있다 —
+        val_loss 발산이 나올 때까지 학습을 끝까지 밀어붙여본 것, 그리고 그 지점에서 아키텍처 자체를
+        바꿔본 것. 둘 다 개인 저장소 <code>kheechan04/iaic-noar-big-t-flow</code>에 있다. 참고로
+        같은 베이스 코드로 승원도 별도로 독립적인 delta 학습(4000스텝)을 진행해 팀 내 실제 최고
+        점수(0.30)를 냈다 — 두 학습은 서로 이어받은 관계가 아니라 각자 따로 돌린 것이다.
       </p>
       <div class="track-meta">
         <span>기간 <b>08-15 ~ 08-18</b></span>
+        <span>서버 <b>RTX PRO 6000 96GB</b></span>
         <span>백본 <b>SDXL-VAE latent</b></span>
-        <span>웜스타트 소스 <b>delta step11500</b></span>
-        <span>실제 최고 <b>0.30</b> (승원 4000스텝)</span>
+        <span>웜스타트 소스 <b>delta step11500(본인)</b></span>
       </div>
     </div>
 
@@ -667,20 +668,22 @@
       SDXL-VAE latent를 액션 조건으로 직접 4채널 delta만큼 이동시켜 다음 프레임을 예측하는 구조다.
       <code>[state_0, state_i, t/15]</code>(13차원)을 ActionMLP에 넣어 조건 벡터를 만들고, UNet
       (channel=[256,512,1024])이 latent 위에서 delta를 예측한다. 채점 3요소(0.3·DINO+0.3·R3D+0.4·Action)를
-      학습 loss로 그대로 쓰는 게 특징이다. 승원의 4000스텝 체크포인트가 실제 리더보드 <b>0.30</b>으로,
-      이 트랙 전체에서 가장 좋은 점수로 남았다.
+      학습 loss로 그대로 쓰는 게 특징이다. <b>승원은 이 코드를 작성했을 뿐 아니라, 별도로 직접
+      4000스텝까지 학습도 진행</b>해 실제 리더보드 <b>0.30</b>을 냈다 — 이 트랙 전체에서 가장 좋은
+      점수로 남았다. (본인의 delta/flow 실험과는 독립된, 승원 개인의 학습 실행이다.)
     </p>
 
-    <h3 class="sub"><span class="idx">2.1</span>delta 연장 학습 — 11500스텝까지</h3>
+    <h3 class="sub"><span class="idx">2.1</span>delta 학습 — 처음부터 11500스텝까지</h3>
     <p>
-      승원의 4000스텝 체크포인트를 이어받아, 개인적으로 <b>11,500스텝까지 연장</b> 학습시켰다.
-      결과는 이 트랙 전체에서 제일 인상적인 반전이었다.
+      같은 베이스 코드로 본인이 <b>처음부터 직접</b> delta를 학습시켰다(승원의 4000스텝 체크포인트를
+      이어받은 게 아니라 별개의 독립 실행). val_loss가 발산해 <b>11,500스텝</b>에서 중단했다. 결과는
+      이 트랙 전체에서 제일 인상적인 반전이었다.
     </p>
     <div class="scoretable-outer">
       <table class="scoretable">
         <tr><th>체크포인트</th><th class="num">proxy val_loss</th><th class="num">실제 점수</th></tr>
         <tr><td>delta 승원판, 4000스텝</td><td class="num">—</td><td class="num">0.30</td></tr>
-        <tr class="worst"><td>delta 본인 연장, <b>11500스텝</b> (proxy 역대 최저)</td><td class="num">0.2142</td><td class="num">0.32 (최악)</td></tr>
+        <tr class="worst"><td>delta 본인, <b>11500스텝</b> (proxy 역대 최저)</td><td class="num">0.2142</td><td class="num">0.32 (최악)</td></tr>
       </table>
     </div>
     <p>
@@ -705,7 +708,7 @@
     <h3 class="sub"><span class="idx">2.3</span>flow 아키텍처 설계</h3>
     <ul>
       <li>헤드 출력을 4채널(delta) → <b>6채널(flow 2 + residual 4)</b>로 변경.</li>
-      <li><b>백본 웜스타트</b>: delta 연장 학습(11500스텝)에서 이미 학습된 인코더/디코더 본체는
+      <li><b>백본 웜스타트</b>: delta 학습(11500스텝)에서 이미 학습된 인코더/디코더 본체는
         그대로 이어받고, <b>바뀐 파라미터는 정확히 <code class="mono">out.2.weight</code> /
         <code class="mono">out.2.bias</code> 2개뿐</b> — 실제 학습 로그에도
         <code class="mono">missing (expected: fresh head out.2.*)</code>로 정확히 그렇게 찍혀 있다.</li>
@@ -845,7 +848,7 @@
     <h4 class="subsub">① "더 학습한다고 실제 점수가 좋아지지 않는다" — 두 번 독립 재현</h4>
     <p>
       Ctrl-World 3라운드(더 학습 + 오버샘플링)가 2라운드보다 실제 점수가 나빴고(0.2559 &gt; 0.2446),
-      delta 연장 학습(11500스텝, proxy 역대 최저)이 실제로는 셋 중 최악(0.32)이었다. 두 사례 모두
+      delta 학습(11500스텝, proxy 역대 최저)이 실제로는 셋 중 최악(0.32)이었다. 두 사례 모두
       <b>내부 지표(proxy val_loss, LPIPS)가 개선되거나 최고치를 찍었는데도 실제 리더보드는 정반대</b>였다 —
       완전히 다른 아키텍처, 완전히 다른 시기에 독립적으로 나온 같은 패턴이라는 게 이 결론의 신뢰도를
       높인다.
