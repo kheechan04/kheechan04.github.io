@@ -648,11 +648,13 @@
       <span class="eyebrow chip chip-personal" style="display:inline-flex">개인 기여 · 희찬</span>
       <h2>delta 학습 + flow 아키텍처 실험</h2>
       <p class="desc">
-        승원이 만든 delta 베이스 코드로, 본인이 직접 처음부터 학습시킨 실험이 두 개 들어 있다 —
-        val_loss 발산이 나올 때까지 학습을 끝까지 밀어붙여본 것, 그리고 그 지점에서 아키텍처 자체를
-        바꿔본 것. 둘 다 개인 저장소 <code>kheechan04/iaic-noar-big-t-flow</code>에 있다. 참고로
-        같은 베이스 코드의 다른 브랜치로 병근도 별도로 독립적인 delta 학습(약 4000스텝)을 진행해
-        팀 내 실제 최고 점수(0.30)를 냈다 — 두 학습은 서로 이어받은 관계가 아니라 각자 따로 돌린 것이다.
+        승원이 구현한 delta 베이스 코드(브랜치 포함)로, 본인이 직접 처음부터 학습시킨 실험이 두 개
+        들어 있다 — val_loss 발산이 나올 때까지 학습을 끝까지 밀어붙여본 것, 그리고 그 지점에서
+        아키텍처 자체를 바꿔본 것. 둘 다 개인 저장소 <code>kheechan04/iaic-noar-big-t-flow</code>에
+        있다. 참고로 같은 베이스 코드의 다른 브랜치로 병근도 별도로 독립적인 delta 학습(약 4000스텝)을
+        진행해 이 delta/flow 계열 안에서는 가장 좋은 점수(0.30)를 냈다 — 다만 팀 전체로 보면 이보다
+        좋은 기록(Ctrl-World 2라운드 0.2446)이 따로 있다. 두 학습은 서로 이어받은 관계가 아니라
+        각자 따로 돌린 것이다.
       </p>
       <div class="track-meta">
         <span>기간 <b>08-15 ~ 08-18</b></span>
@@ -670,10 +672,12 @@
       쓰는 게 특징이다.
     </p>
     <p>
-      GitHub <code>kvara66/IAIC</code> 저장소엔 이 계열 코드가 여러 브랜치로 갈라져 있다 —
+GitHub <code>kvara66/IAIC</code> 저장소엔 이 계열 코드가 여러 브랜치로 갈라져 있다 —
       <code>noar_big</code>, <code>noar_big_t</code> 외에 준호가 진행한 <code>noar_seq</code>
       등도 있다(그쪽 결과는 확인 못함). 이 비교에 해당하는 건 그중 <code>noar_big</code>과
-      <code>noar_big_t</code> 두 개다. 직접 diff해보니 <b>유일한 차이는 ActionMLP 입력</b>이다 —
+      <code>noar_big_t</code> 두 개다 — <b>둘 다 코드 구현 자체는 승원</b>이 했고, 병근과 본인은
+      각자 자기 브랜치를 <b>학습만</b> 시켰다(타임스텝 조건화를 코드에 추가한 것도 승원이지 본인이
+      구현한 게 아니다). 직접 diff해보니 <b>유일한 차이는 ActionMLP 입력</b>이다 —
       <code>noar_big</code>은
       <code>[state_0, state_i]</code>(12차원, 관절 위치만), <code>noar_big_t</code>는
       <code>[state_0, state_i, t/15]</code>(13차원, 정규화된 타임스텝 <code>t/15</code>까지 추가) —
