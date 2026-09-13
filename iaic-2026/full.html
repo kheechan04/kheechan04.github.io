@@ -651,7 +651,7 @@
         승원이 만든 delta 베이스 코드로, 본인이 직접 처음부터 학습시킨 실험이 두 개 들어 있다 —
         val_loss 발산이 나올 때까지 학습을 끝까지 밀어붙여본 것, 그리고 그 지점에서 아키텍처 자체를
         바꿔본 것. 둘 다 개인 저장소 <code>kheechan04/iaic-noar-big-t-flow</code>에 있다. 참고로
-        같은 베이스 코드로 승원도 별도로 독립적인 delta 학습(4000스텝)을 진행해 팀 내 실제 최고
+        같은 베이스 코드로 병근도 별도로 독립적인 delta 학습(약 4000스텝)을 진행해 팀 내 실제 최고
         점수(0.30)를 냈다 — 두 학습은 서로 이어받은 관계가 아니라 각자 따로 돌린 것이다.
       </p>
       <div class="track-meta">
@@ -668,21 +668,22 @@
       SDXL-VAE latent를 액션 조건으로 직접 4채널 delta만큼 이동시켜 다음 프레임을 예측하는 구조다.
       <code>[state_0, state_i, t/15]</code>(13차원)을 ActionMLP에 넣어 조건 벡터를 만들고, UNet
       (channel=[256,512,1024])이 latent 위에서 delta를 예측한다. 채점 3요소(0.3·DINO+0.3·R3D+0.4·Action)를
-      학습 loss로 그대로 쓰는 게 특징이다. <b>승원은 이 코드를 작성했을 뿐 아니라, 별도로 직접
-      4000스텝까지 학습도 진행</b>해 실제 리더보드 <b>0.30</b>을 냈다 — 이 트랙 전체에서 가장 좋은
-      점수로 남았다. (본인의 delta/flow 실험과는 독립된, 승원 개인의 학습 실행이다.)
+      학습 loss로 그대로 쓰는 게 특징이다. <b>승원이 코드를 작성했고, 병근이 그 코드로 별도로 직접
+      약 4000스텝까지 학습</b>시켜 실제 리더보드 <b>0.30</b>(당시 proxy val_loss 약 0.26)을 냈다 —
+      이 트랙 전체에서 가장 좋은 점수로 남았다. (본인의 delta/flow 실험과는 독립된, 병근 개인의
+      학습 실행이다.)
     </p>
 
     <h3 class="sub"><span class="idx">2.1</span>delta 학습 — 처음부터 11500스텝까지</h3>
     <p>
-      같은 베이스 코드로 본인이 <b>처음부터 직접</b> delta를 학습시켰다(승원의 4000스텝 체크포인트를
+      같은 베이스 코드로 본인이 <b>처음부터 직접</b> delta를 학습시켰다(병근의 약 4000스텝 체크포인트를
       이어받은 게 아니라 별개의 독립 실행). val_loss가 발산해 <b>11,500스텝</b>에서 중단했다. 결과는
       이 트랙 전체에서 제일 인상적인 반전이었다.
     </p>
     <div class="scoretable-outer">
       <table class="scoretable">
         <tr><th>체크포인트</th><th class="num">proxy val_loss</th><th class="num">실제 점수</th></tr>
-        <tr><td>delta 승원판, 4000스텝</td><td class="num">—</td><td class="num">0.30</td></tr>
+        <tr><td>delta 병근판, 약 4000스텝</td><td class="num">~0.26</td><td class="num">0.30</td></tr>
         <tr class="worst"><td>delta 본인, <b>11500스텝</b> (proxy 역대 최저)</td><td class="num">0.2142</td><td class="num">0.32 (최악)</td></tr>
       </table>
     </div>
@@ -756,15 +757,16 @@
     <div class="scoretable-outer">
       <table class="scoretable">
         <tr><th>체크포인트</th><th class="num">proxy val_loss</th><th class="num">실제 점수</th></tr>
-        <tr class="best"><td>delta (승원, 4000스텝)</td><td class="num">—</td><td class="num">0.30</td></tr>
+        <tr class="best"><td>delta (병근, 약 4000스텝)</td><td class="num">~0.26</td><td class="num">0.30</td></tr>
         <tr><td>flow (best, step4500)</td><td class="num">0.2272</td><td class="num">0.312</td></tr>
         <tr><td>flow (step2000)</td><td class="num">0.2380</td><td class="num">0.315</td></tr>
         <tr class="worst"><td>delta (본인, 11500스텝, proxy 역대 최저)</td><td class="num">0.2142</td><td class="num">0.32</td></tr>
       </table>
     </div>
     <p>
-      네 체크포인트를 나란히 놓으면 <b>proxy val_loss 순위(step11500 최저 → step4500 → step2000 →
-      승원 4000)가 실제 리더보드 순위와 정확히 거꾸로 뒤집힌다.</b> flow 자체는 proxy 기준으로
+      네 체크포인트를 나란히 놓으면 <b>proxy val_loss 순위(11500스텝 0.2142 → step4500 0.2272 →
+      step2000 0.2380 → 병근 4000스텝 0.26, 오름차순)가 실제 리더보드 순위(0.30 → 0.312 → 0.315 →
+      0.32)와 정확히 거꾸로 뒤집힌다.</b> flow 자체는 proxy 기준으로
       delta 대비 매 지점(step 500~2500)에서 <b>12~19% 낮은</b> 값을 일관되게 기록했지만, 실제
       순위에는 그 개선이 전혀 반영되지 않았다.
     </p>
