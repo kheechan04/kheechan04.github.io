@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jarvischan 포트폴리오(개인 기록용)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:#F4F6F6; --surface:#FFFFFF; --surface-2:#EBEFEF; --surface-3:#E1E7E7;
+    --text:#171B1D; --text-dim:#4E585B; --text-faint:#7C878A;
+    --border:#D7DEDE; --border-strong:#BFC9C9;
+    --accent:#0E7C86; --accent-strong:#0A5D66; --accent-soft:#E1F1F1; --accent-ink:#063C43;
+    --team:#6C5B9E; --team-soft:#EDE9F6; --team-ink:#3C3164;
+    --convo:#8A8F8F; --convo-soft:#EEEEEC;
+    --good:#1E8E6B; --good-soft:#E3F3EC;
+    --bad:#B4552A; --bad-soft:#F7E9E0;
+    --shadow: 0 1px 2px rgba(20,30,30,.04), 0 6px 20px rgba(20,30,30,.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#10151A; --surface:#161D22; --surface-2:#1C242A; --surface-3:#232D33;
+      --text:#E7ECEC; --text-dim:#AAB6B8; --text-faint:#7C878A;
+      --border:#2A3339; --border-strong:#38434A;
+      --accent:#4FCAD3; --accent-strong:#7EDBE1; --accent-soft:rgba(79,202,211,.12); --accent-ink:#B7EEF2;
+      --team:#B0A0E8; --team-soft:rgba(176,160,232,.14); --team-ink:#D9CFF5;
+      --convo:#8A9295; --convo-soft:rgba(138,146,146,.12);
+      --good:#4FCE9E; --good-soft:rgba(79,206,158,.12);
+      --bad:#E2934F; --bad-soft:rgba(226,147,79,.12);
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#10151A; --surface:#161D22; --surface-2:#1C242A; --surface-3:#232D33;
+    --text:#E7ECEC; --text-dim:#AAB6B8; --text-faint:#7C878A;
+    --border:#2A3339; --border-strong:#38434A;
+    --accent:#4FCAD3; --accent-strong:#7EDBE1; --accent-soft:rgba(79,202,211,.12); --accent-ink:#B7EEF2;
+    --team:#B0A0E8; --team-soft:rgba(176,160,232,.14); --team-ink:#D9CFF5;
+    --convo:#8A9295; --convo-soft:rgba(138,146,146,.12);
+    --good:#4FCE9E; --good-soft:rgba(79,206,158,.12);
+    --bad:#E2934F; --bad-soft:rgba(226,147,79,.12);
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:"IBM Plex Sans KR","Malgun Gothic",sans-serif;
+    font-size:16px; line-height:1.75; margin:0;
+    padding-inline:20px;
+  }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+
+  h1,h2,h3,h4{ font-family:"Gowun Batang",serif; text-wrap:balance; font-weight:700; color:var(--text); margin:0; }
+  .mono, code, .num, table td.num, table th.num{ font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; }
+  a{ color:var(--accent-strong); }
+  a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .wrap{ max-width:1080px; margin-inline:auto; }
+  .prose{ max-width:720px; }
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:40; backdrop-filter:blur(8px);
+    background:color-mix(in srgb, var(--bg) 86%, transparent);
+    border-bottom:1px solid var(--border);
+    padding-block:10px; margin-inline:-20px; padding-inline:20px;
+  }
+  .topbar-row{ max-width:1080px; margin-inline:auto; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+  .brand{ font-family:"Gowun Batang",serif; font-weight:700; font-size:1.05rem; white-space:nowrap; }
+  .brand small{ display:block; font-family:"IBM Plex Sans KR",sans-serif; font-weight:400; font-size:.72rem; color:var(--text-faint); }
+  .toc-toggle summary{ cursor:pointer; list-style:none; font-size:.85rem; color:var(--text-dim); border:1px solid var(--border-strong); padding:6px 12px; border-radius:99px; white-space:nowrap; }
+  .toc-toggle summary::-webkit-details-marker{ display:none; }
+  .toc-panel{
+    position:absolute; right:20px; margin-top:8px; background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; box-shadow:var(--shadow); padding:14px 18px; width:min(320px, calc(100vw - 40px));
+    display:grid; gap:6px; font-size:.88rem;
+  }
+  .toc-panel a{ color:var(--text-dim); text-decoration:none; display:flex; gap:8px; align-items:baseline; }
+  .toc-panel a:hover{ color:var(--accent-strong); }
+  .toc-panel .n{ font-family:"IBM Plex Mono",monospace; color:var(--text-faint); font-size:.78rem; min-width:1.4em; }
+
+  /* ---------- cover ---------- */
+  .cover{ padding-block:56px 40px; }
+  .kicker{ font-family:"IBM Plex Mono",monospace; text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; color:var(--accent-strong); }
+  .cover h1{ font-size:clamp(1.9rem, 4vw, 2.7rem); margin-block:14px 10px; line-height:1.25; }
+  .cover .lede{ color:var(--text-dim); font-size:1.05rem; max-width:640px; }
+  .stat-row{ display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
+  .stat{
+    background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:14px 18px; min-width:140px; flex:1 1 160px; box-shadow:var(--shadow);
+  }
+  .stat .v{ font-family:"IBM Plex Mono",monospace; font-size:1.5rem; font-weight:600; }
+  .stat .l{ font-size:.78rem; color:var(--text-faint); margin-top:2px; }
+  .stat.hi .v{ color:var(--bad); }
+
+  /* ---------- legend ---------- */
+  .legend{ display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
+  .chip{ display:inline-flex; align-items:center; gap:6px; font-size:.78rem; padding:4px 10px; border-radius:99px; font-weight:600; white-space:nowrap; }
+  .chip-personal{ background:var(--accent-soft); color:var(--accent-ink); }
+  .chip-team{ background:var(--team-soft); color:var(--team-ink); }
+  .chip-convo{ background:var(--convo-soft); color:var(--text-dim); border:1px dashed var(--border-strong); }
+  .chip-good{ background:var(--good-soft); color:var(--good); }
+  .chip-bad{ background:var(--bad-soft); color:var(--bad); }
+
+  /* ---------- timeline ---------- */
+  .timeline-outer{ overflow-x:auto; margin-block:28px; padding-bottom:10px; }
+  .timeline{ display:flex; gap:0; min-width:980px; position:relative; padding-top:14px; }
+  .timeline::before{ content:""; position:absolute; top:24px; left:0; right:0; height:2px; background:var(--border-strong); }
+  .tl-item{ flex:1; position:relative; padding-inline:10px; }
+  .tl-dot{ width:11px; height:11px; border-radius:50%; background:var(--surface); border:2px solid var(--accent); margin-inline:auto; position:relative; z-index:1; }
+  .tl-date{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--text-faint); text-align:center; margin-top:8px; }
+  .tl-label{ font-size:.82rem; text-align:center; margin-top:4px; line-height:1.4; }
+
+  /* ---------- sections ---------- */
+  section.track{ margin-top:64px; padding-top:6px; scroll-margin-top:84px; }
+  #sources{ scroll-margin-top:84px; }
+  .track-head{ border-left:4px solid var(--accent); padding-left:20px; margin-bottom:28px; }
+  .track-head .eyebrow{ font-family:"IBM Plex Mono",monospace; font-size:.75rem; color:var(--text-faint); text-transform:uppercase; letter-spacing:.08em; }
+  .track-head h2{ font-size:clamp(1.5rem,3vw,2rem); margin-block:6px 8px; }
+  .track-head .desc{ color:var(--text-dim); max-width:680px; }
+  .track-meta{ display:flex; flex-wrap:wrap; gap:18px; margin-top:14px; font-size:.85rem; color:var(--text-dim); }
+  .track-meta b{ color:var(--text); font-family:"IBM Plex Mono",monospace; }
+
+  h3.sub{ font-size:1.2rem; margin-top:40px; margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+  h3.sub .idx{ font-family:"IBM Plex Mono",monospace; font-size:.85rem; color:var(--accent-strong); font-weight:500; }
+  h4.subsub{ font-size:1.02rem; margin-top:26px; margin-bottom:8px; font-family:"IBM Plex Sans KR",sans-serif; font-weight:700; }
+
+  p{ margin:0 0 14px; max-width:720px; }
+  ul,ol{ margin:0 0 14px; padding-left:1.3em; max-width:700px; }
+  li{ margin-bottom:6px; }
+  strong{ font-weight:700; }
+  .muted{ color:var(--text-faint); font-size:.85rem; }
+
+  /* ---------- callouts ---------- */
+  .callout{ border-radius:10px; padding:16px 20px; margin:18px 0; max-width:700px; border:1px solid var(--border); }
+  .callout-finding{ background:var(--surface-2); border-left:3px solid var(--accent); }
+  .callout-lesson{ background:var(--surface-2); border-left:3px solid var(--good); }
+  .callout-warn{ background:var(--bad-soft); border-left:3px solid var(--bad); }
+  .callout-convo{ background:var(--convo-soft); border:1px dashed var(--border-strong); }
+  .callout .tag{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--text-faint); display:block; margin-bottom:6px; }
+  .callout p:last-child{ margin-bottom:0; }
+
+  /* ---------- config table (yaml-style) ---------- */
+  .cfgtable{ width:100%; max-width:700px; border-collapse:collapse; margin:16px 0; font-size:.88rem; }
+  .cfgtable th{ text-align:left; font-family:"IBM Plex Sans KR"; font-size:.75rem; color:var(--text-faint); text-transform:uppercase; letter-spacing:.04em; padding:6px 10px; border-bottom:1px solid var(--border-strong); }
+  .cfgtable td{ padding:8px 10px; border-bottom:1px solid var(--border); vertical-align:top; }
+  .cfgtable td.key{ font-family:"IBM Plex Mono",monospace; color:var(--accent-strong); white-space:nowrap; }
+  .cfgtable tr:last-child td{ border-bottom:none; }
+
+  /* ---------- filecard / evidence ---------- */
+  details.evidence{ background:var(--surface); border:1px solid var(--border); border-radius:10px; margin:16px 0; max-width:700px; }
+  details.evidence summary{ cursor:pointer; padding:12px 16px; font-size:.85rem; color:var(--text-dim); display:flex; align-items:center; gap:8px; }
+  details.evidence summary::marker{ color:var(--accent); }
+  details.evidence .body{ padding:0 16px 16px; }
+  pre{ background:var(--surface-3); border-radius:8px; padding:12px 14px; overflow-x:auto; font-size:.82rem; line-height:1.6; margin:0 0 10px; }
+  pre code{ font-family:"IBM Plex Mono",monospace; }
+
+  hr.div{ border:none; border-top:1px solid var(--border); margin:48px 0; max-width:700px; }
+
+  footer{ margin-top:80px; padding-block:40px 60px; border-top:1px solid var(--border); color:var(--text-faint); font-size:.85rem; }
+  footer a{ color:var(--text-dim); }
+
+  @media (max-width:640px){
+    .cover{ padding-block:40px 28px; }
+    .track-head{ padding-left:14px; }
+    h3.sub{ flex-wrap:wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div class="brand">Jarvischan 포트폴리오(개인 기록용)<small>전체 시행착오 기록 — <a href="index.html" style="color:inherit;text-decoration:underline;">요약판 보기 →</a></small></div>
+    <details class="toc-toggle">
+      <summary>목차</summary>
+      <div class="toc-panel">
+        <a href="#overview"><span class="n">00</span> 개요 &amp; 결과</a>
+        <a href="#track-wake"><span class="n">01</span> 웨이크워드 &amp; 마이크 핸드오프</a>
+        <a href="#track-vad"><span class="n">02</span> "말이 끝났다"를 어떻게 아는가</a>
+        <a href="#track-tts"><span class="n">03</span> 답변이 중간에 끊기는 문제</a>
+        <a href="#track-deploy"><span class="n">04</span> 배포 파이프라인이 막혔던 이야기</a>
+        <a href="#closing"><span class="n">05</span> 마무리 소회</a>
+        <a href="#sources"><span class="n">06</span> 자료 출처</a>
+      </div>
+    </details>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="cover" id="overview">
+    <div class="kicker">personal engineering portfolio · 2026.09</div>
+    <h1>마이크 하나, 브라우저 음성 API 셋,<br>그리고 다섯 번의 재설계</h1>
+    <p class="lede">
+      영화 속 JARVIS처럼 말로 묻고 답하는 음성 비서 <b>Jarvischan</b>을 Vercel에 무료로 배포하고,
+      실제로 써보면서 나온 문제들을 하나씩 잡아나간 기록이다. Claude Code를 페어 삼아 코드를 고치고
+      바로 재배포해서 다시 테스트하는 방식으로 작업했고, 이 문서엔 "어떻게 고쳤는가"뿐 아니라
+      "왜 처음 시도가 틀렸는지"까지 남겨뒀다 — 특히 2장(무음 판정)은 같은 문제를 다른 각도로
+      네 번 다시 풀다가 결국 접근 자체를 바꾼 과정이라, 나중에 비슷한 문제를 만났을 때 제일 먼저
+      펼쳐볼 장이다.
+    </p>
+
+    <div class="stat-row">
+      <div class="stat"><div class="v">0원/월</div><div class="l">운영비 (Vercel Hobby + Groq 무료 티어)</div></div>
+      <div class="stat"><div class="v">5</div><div class="l">"말이 끝났다" 판정 로직 재설계 횟수</div></div>
+      <div class="stat"><div class="v">80자</div><div class="l">TTS 청크 최종 크기 (한국어 기준, 180자에서 축소)</div></div>
+      <div class="stat"><div class="v">4</div><div class="l">Vercel 배포가 막혔던 서로 다른 원인</div></div>
+    </div>
+
+    <div class="legend">
+      <span class="chip chip-personal">● 직접 진단·설계·검증</span>
+      <span class="chip chip-convo">▨ Claude Code와 실시간 협업 — 문제 재현 → 진단 → 수정 → 재배포 → 재확인</span>
+    </div>
+  </header>
+
+  <section id="timeline-section">
+    <h3 class="sub"><span class="idx">TL</span>전체 타임라인</h3>
+    <div class="timeline-outer">
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-22</div><div class="tl-label">Vercel 최초 배포<br>비밀번호 인증 설정</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-22</div><div class="tl-label">박수 웨이크 인식<br>개선</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-22</div><div class="tl-label">GitHub 연동<br>배포 파이프라인 디버깅</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">웨이크워드 추가<br>마이크 핸드오프 버그 발견·수정</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">VAD 1~4차 재설계<br>(floor 재보정 → 대역필터 → 스무딩)</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">VAD 접근 전환<br>브라우저 자체 종료감지로</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">TTS 컷오프 발견·수정<br>(청크 분할 → 크기 축소 → 안전장치)</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">이름 변경(Jarvischan)<br>이어서 작업할 준비 문서화</div></div>
+      </div>
+    </div>
+    <p class="muted">구성: 정적 페이지 <code>index.html</code>(빌드 과정 없음) + Vercel 서버 함수
+      <code>api/chat.js</code>(Groq 도구 호출 루프, 무료 도구 7개) + <code>api/transcribe.js</code>
+      (Groq Whisper 받아쓰기). 프레임워크·npm 의존성 없음. 원본 빌드 가이드는 Instagram에서 본
+      튜토리얼을 참고해 시작했고, 이 문서에 담긴 문제 진단·해결은 전부 실사용 중 직접 겪고 고친
+      것들이다.</p>
+  </section>
+
+  <!-- ================= TRACK 1 — WAKE WORD & MIC HANDOFF ================= -->
+  <section class="track" id="track-wake">
+    <div class="track-head">
+      <span class="eyebrow chip chip-personal" style="display:inline-flex">기능 추가 → 버그 발견·수정</span>
+      <h2>웨이크워드, 그리고 마이크를 두고 벌어진 경합</h2>
+      <p class="desc">
+        박수 두 번으로 깨우는 기능은 있었지만 "박수를 못 치거나 기기에서 멀리 떨어져 있을 때"는
+        무력했다. 브라우저 내장 음성인식을 웨이크워드 감지에 재사용하는 기능을 추가하자마자,
+        그 인식기와 실제 받아쓰기(Whisper)용 마이크 스트림이 서로 자리를 두고 부딪히는 문제가
+        나왔다.
+      </p>
+      <div class="track-meta">
+        <span>계기 <b>"박수를 못 치는 상황"에 대한 사용자 질문</b></span>
+        <span>재사용 API <b>브라우저 SpeechRecognition</b></span>
+      </div>
+    </div>
+
+    <h3 class="sub"><span class="idx">1.0</span>설계 — 왜 별도 API 재사용인가</h3>
+    <p>
+      대안으로 "항상 듣고 있다가 음량이 사람 목소리 수준으로 올라오면 자동 시작"하는 방식도 검토했지만,
+      박수 감지처럼 소리 크기만으로는 오탐이 많을 게 뻔했다. 대신 이미 Whisper 폴백으로 코드베이스에
+      들어있던 브라우저 <code>SpeechRecognition</code>을 계속 듣는 모드(<code>continuous:true</code>)로
+      돌리면서 "Jarvis" / "자비스"가 들리는지만 검사하는 쪽을 택했다 — 별도 API 비용 없이, 대화가
+      진행 중이 아닐 때(idle)만 동작하게 감시 루프를 하나 더 둬서 자기 자신의 응답 음성(TTS)을
+      웨이크워드로 잘못 알아듣는 것도 막았다.
+    </p>
+
+    <h3 class="sub"><span class="idx">1.1</span>버그 — 대화가 조용해져도 끝나지 않음</h3>
+    <p>
+      기능은 잘 작동했지만, 실사용 테스트에서 "말이 끝났는데 녹음이 전혀 끝나지 않는다"는 문제가
+      나왔다. 원인은 타이밍이었다: 웨이크워드를 인식한 즉시 그 <code>SpeechRecognition</code> 세션을
+      멈추고 곧바로 Whisper용 <code>getUserMedia</code>를 호출했는데, Chrome이 이전 세션의 마이크를
+      실제로 놓기(release) 전에 새 스트림을 요청하면 <code>MediaRecorder</code>가 <b>"녹음 중"
+      상태로는 보이지만 실제로는 오디오를 전혀 못 받고 종료 이벤트도 안 나는 상태</b>로 멈춰버렸다.
+    </p>
+    <div class="callout callout-finding">
+      <span class="tag">진단</span>
+      <p>
+        브라우저 음성 API 두 개(<code>SpeechRecognition</code>, <code>getUserMedia</code>)가 같은
+        마이크 하드웨어를 두고 빠르게 넘겨받으려 하면, 겉으로는 에러 없이 성공한 것처럼 보이면서
+        실제로는 죽어있는 상태가 될 수 있다 — 두 API 모두 마이크 해제/획득이 <b>비동기</b>라는 게
+        문서에는 잘 안 드러난다.
+      </p>
+    </div>
+    <p>
+      해결: 웨이크워드 인식기의 <code>stop()</code>을 호출한 뒤, 실제로 세션이 끝났다는 신호
+      (<code>onend</code>)를 받고 나서야 Whisper 녹음을 시작하도록 순서를 바꿨다. <code>onend</code>가
+      안 오는 예외 상황에 대비해 400ms 타임아웃도 안전장치로 같이 걸었다.
+    </p>
+
+    <div class="callout callout-lesson">
+      <span class="tag">교훈</span>
+      <p>브라우저 API를 이어붙일 때는 "성공적으로 시작됐다"와 "이전 리소스가 실제로 해제됐다"를
+        다른 신호로 취급해야 한다. 특히 마이크·카메라처럼 하드웨어를 공유하는 API는 더더욱.</p>
+    </div>
+  </section>
+
+  <!-- ================= TRACK 2 — VAD ================= -->
+  <section class="track" id="track-vad">
+    <div class="track-head">
+      <span class="eyebrow chip chip-personal" style="display:inline-flex">같은 문제, 다섯 번의 재설계</span>
+      <h2>"말이 끝났다"를 어떻게 아는가</h2>
+      <p class="desc">
+        사용자가 말을 마치면 자동으로 녹음을 끝내는 기능(VAD, 음성 활동 감지)이 실사용 중 계속
+        문제를 일으켰다. 매번 증상은 다르게 나타났지만("영원히 안 끝남" → "10초씩 걸림" →
+        "그래도 안 끝남"), 근본 원인은 하나로 수렴했다 — <b>마이크 음량(진폭)만으로 "사람이 말하고
+        있는지"를 판단하는 방식 자체의 한계</b>. 이 장은 그 한계를 인정하고 접근을 바꾸기까지의
+        전체 과정이다.
+      </p>
+      <div class="track-meta">
+        <span>재설계 <b>5회</b></span>
+        <span>최종 해법 <b>브라우저 SpeechRecognition의 onspeechend 재사용</b></span>
+      </div>
+    </div>
+
+    <h3 class="sub"><span class="idx">2.0</span>최초 설계 — 녹음 시작 300ms의 스냅샷</h3>
+    <p>
+      최초 구현은 녹음이 시작되고 첫 300ms 동안의 평균 음량을 "조용한 방의 기준(floor)"으로 딱 한 번
+      재고, 그 이후 음량이 <code>floor + 0.035</code> 밑으로 1.2초 이어지면 대화가 끝났다고 판단하는
+      방식이었다.
+    </p>
+    <div class="callout callout-warn">
+      <span class="tag">증상 — 조용해져도 안 끝남</span>
+      <p>
+        조용한 방이 아니면 재현됐다. 녹음 시작 직후의 300ms가 우연히 더 조용했거나, 이후 생활 소음
+        (에어컨, 도로 소음)이 커지면 그 소음 자체가 계속 <code>floor + 0.08</code>(말하는 중 기준)을
+        넘어서 <b>영원히 "말하는 중"으로 오분류</b>됐다. 한 번 정한 기준을 끝까지 고정해서 쓰는 게
+        문제였다.
+      </p>
+    </div>
+
+    <h3 class="sub"><span class="idx">2.1</span>1차 재설계 — 3초마다 기준 재보정</h3>
+    <p>
+      고정 스냅샷 대신, 3초 창(window)마다 그 구간에서 가장 낮았던 음량으로 기준을 다시 앵커링하도록
+      바꿨다. 사람 말소리는 단어·숨 사이에 짧은 공백이 있어서 창의 최솟값이 여전히 낮게 잡히지만,
+      꾸준히 일정한 생활 소음은 창 전체가 비슷한 값이라 자연스럽게 새 기준으로 흡수된다는 논리였다.
+      이 자체는 맞아떨어져서, "조용한 방이 아니면 안 끝남" 문제는 해결됐다.
+    </p>
+
+    <h3 class="sub"><span class="idx">2.2</span>2차 재설계 — 목소리 대역만 보기</h3>
+    <p>
+      그런데 재보정 이후에도 일부 상황에서 여전히 끝나지 않는 경우가 있었다. 원인을 다시 보니, 음량을
+      analyser의 <b>64개 주파수 빈 전체</b>(초저음 웅웅거림부터 초고음 히스노이즈까지)를 뭉뚱그려
+      평균 내고 있어서, 목소리와 무관한 소음이 신호 대부분을 차지하고 있었다. 사람 목소리가 실제로
+      실리는 대역(약 300Hz~3.4kHz)에 해당하는 빈만 골라 평균 내도록 바꿨다 — 표본 주파수를 알아야
+      정확한 빈 인덱스를 계산할 수 있어서, <code>audioCtx.sampleRate</code> 기반으로 동적으로 범위를
+      산출했다.
+    </p>
+
+    <h3 class="sub"><span class="idx">2.3</span>3차 재설계 — 좁힌 대역의 부작용, 스무딩</h3>
+    <div class="callout callout-warn">
+      <span class="tag">증상 — 이번엔 10초씩 걸림</span>
+      <p>
+        대역을 좁히자(64개 → 약 8개 빈) 측정값 자체가 훨씬 들쭉날쭉해졌다. "조용함" 1.2초 연속 판정이
+        잡음 스파이크에 계속 리셋되다가 우연히 깨끗한 구간을 만나야만 통과되는 패턴이 돼서, 체감상
+        녹음 종료까지 10초 가까이 걸렸다.
+      </p>
+    </div>
+    <p>
+      VAD 판정에 쓰는 값에만 지수이동평균(EMA, 새 값 가중치 0.45)을 가볍게 걸어서 안정시켰다. 화면
+      비주얼라이저용 레벨 값은 건드리지 않아서 시각적 생동감은 그대로 유지했다.
+    </p>
+
+    <h3 class="sub"><span class="idx">2.4</span>4차 재설계 — 접근을 바꾸다</h3>
+    <p>
+      스무딩까지 넣었는데도 정적 구간이 여전히 길다는 피드백이 왔다. 여기서 멈추고 다시 생각했다:
+      <b>진폭 기준 VAD는 아무리 다듬어도 "말이 끝났다"를 소리 크기만으로 판단하는 방식 자체에
+      천장이 있다.</b> 반면 브라우저의 <code>SpeechRecognition</code>은 실제 받아쓰기 제품에 쓰이는,
+      훨씬 정교하게 튜닝된 자체 음성종료 감지(<code>onspeechend</code>)를 이미 내장하고 있다.
+    </p>
+    <p>
+      Whisper 녹음(<code>MediaRecorder</code>)과 별개로, <b>텍스트는 전혀 쓰지 않고 종료 신호만
+      받는 보조 인식 세션</b>을 하나 더 띄워서 <code>onspeechend</code>가 뜨면 바로 녹음을 멈추도록
+      바꿨다. <code>onend</code>만으로는 트리거하지 않는다 — 말을 시작하기도 전에 인식기가 포기하고
+      끝나버리는 경우까지 "종료"로 오인할 위험이 있어서다. 기존 진폭 VAD와 7초/20초 하드캡은
+      이 API를 지원 안 하는 브라우저나 이벤트가 안 오는 예외 상황을 위한 백업으로 남겨뒀다.
+    </p>
+
+    <div class="callout callout-lesson">
+      <span class="tag">이 장에서 남은 교훈</span>
+      <p>
+        증상이 바뀔 때마다 파라미터를 손보는 것도 유효한 디버깅이지만, <b>몇 번을 다듬어도 근본
+        한계가 반복해서 드러난다면 파라미터가 아니라 접근 자체를 의심해야 한다.</b> 특히 브라우저가
+        이미 잘 풀어놓은 문제(음성 종료 감지)를 손으로 재발명하려 했던 게 애초에 무리였다 — 그 API를
+        "받아쓰기 품질"이 아니라 "타이밍 신호"로만 재사용하면 정확도 걱정 없이 장점만 가져올 수
+        있었다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= TRACK 3 — TTS CUTOFF ================= -->
+  <section class="track" id="track-tts">
+    <div class="track-head">
+      <span class="eyebrow chip chip-personal" style="display:inline-flex">Chrome 버그 우회</span>
+      <h2>답변이 길면 음성이 중간에 끊기는 문제</h2>
+      <p class="desc">
+        답변이 조금만 길어지면 특정 지점에서 소리가 뚝 끊겼다. Chrome의 오래된 버그였고, 첫 수정은
+        절반만 맞았다 — 한국어라는 변수를 놓쳤다.
+      </p>
+    </div>
+
+    <h3 class="sub"><span class="idx">3.0</span>원인 — Chrome의 긴 발화 컷오프 버그</h3>
+    <p>
+      Chrome은 <code>SpeechSynthesisUtterance</code> 하나가 대략 15초 이상 이어지면, <code>onend</code>·
+      <code>onerror</code> 어느 쪽도 발생시키지 않은 채 그냥 재생을 멈춰버리는 오래된 버그가 있다.
+      답변 전체를 통짜 발화 하나로 넘기고 있었던 게 문제였다.
+    </p>
+
+    <h3 class="sub"><span class="idx">3.1</span>1차 수정 — 문장 단위 큐, 그리고 절반만 맞았던 이유</h3>
+    <p>
+      답변을 문장 단위(최대 180자)로 잘라 순서대로 <code>speak()</code>를 호출하는 큐 방식으로
+      바꿨다. 영어 기준으로는 충분히 안전한 길이였다.
+    </p>
+    <div class="callout callout-warn">
+      <span class="tag">재발 — 한국어에서만</span>
+      <p>
+        한국어 답변에서 여전히 끊겼다. <b>한국어는 글자당 발음 시간이 영어보다 길어서</b>, 같은
+        180자라도 실제 재생 시간이 영어보다 훨씬 길어 Chrome의 컷오프 한계를 다시 넘었다. 청크
+        크기를 문자 수로만 관리하면 언어별 발화 속도 차이를 놓친다는 걸 뒤늦게 알았다.
+      </p>
+    </div>
+    <p>
+      청크 크기를 <b>80자</b>로 줄이고, 마침표 없이 이어지는 긴 문장(쉼표만 있는 나열형 답변 등)은
+      단어 경계 기준으로 강제 분할하도록 추가했다.
+    </p>
+
+    <h3 class="sub"><span class="idx">3.2</span>2차 수정 — 소리는 다 나왔는데 화면이 멈춤</h3>
+    <p>
+      청크 분할 이후에도 가끔 "소리는 끝까지 다 들렸는데 화면 상태가 계속 RESPONDING에 멈춰있다"는
+      증상이 남았다. 마지막 청크의 <code>onend</code>가 간헐적으로 아예 발생하지 않는, Chrome 음성
+      이벤트 자체의 신뢰성 문제였다. 청크마다 글자 수 기반으로 예상 재생 시간을 추정해 안전장치
+      타이머를 같이 걸어서, <code>onend</code>가 안 와도 강제로 다음 단계로 넘어가게 했다.
+    </p>
+
+    <div class="callout callout-lesson">
+      <span class="tag">교훈</span>
+      <p>브라우저가 쏘는 완료 이벤트(<code>onend</code>)를 유일한 진행 신호로 믿지 않는다. 특히
+        음성 관련 Web API는 구현 신뢰성이 낮은 편이라, 이벤트 기반 로직에는 항상 타임아웃 기반
+        안전장치를 같이 두는 게 안전하다.</p>
+    </div>
+  </section>
+
+  <!-- ================= TRACK 4 — DEPLOY PIPELINE ================= -->
+  <section class="track" id="track-deploy">
+    <div class="track-head">
+      <span class="eyebrow chip chip-personal" style="display:inline-flex">운영 · 인프라</span>
+      <h2>배포 파이프라인이 막혔던 이야기</h2>
+      <p class="desc">
+        CLI로 여러 번 잘 배포되던 프로젝트가, GitHub 연동을 시작한 직후부터 몇 시간째 배포가
+        <code>UNKNOWN</code> 상태로 멈추기 시작했다. 진짜 원인은 예상 밖의 곳에 있었다.
+      </p>
+      <div class="track-meta">
+        <span>증상 <b>모든 배포가 상태 UNKNOWN, 빌드 로그 없음</b></span>
+        <span>제거해나간 원인 후보 <b>4개</b></span>
+      </div>
+    </div>
+
+    <h3 class="sub"><span class="idx">4.0</span>증상 — 배포마다 조용히 멈춤</h3>
+    <p>
+      GitHub 저장소를 새로 만들고 연동한 직후부터, CLI로 재배포를 시도하든 <code>git push</code>로
+      트리거하든 배포가 전부 <code>UNKNOWN</code> 상태에서 멈췄다. 대시보드에는 <b>"Fix Git
+      Configuration"</b> 버튼만 떴고, 빌드 로그는 아예 비어 있었다.
+    </p>
+
+    <h3 class="sub"><span class="idx">4.1</span>후보를 하나씩 제거</h3>
+    <ul>
+      <li><b>Vercel 계정에 GitHub 로그인 연결 안 됨.</b> 연결했지만 안 풀림.</li>
+      <li><b>GitHub에 Vercel 앱이 설치 안 돼 있음.</b> All repositories 권한으로 설치했지만 안 풀림.</li>
+      <li><b>Root Directory 미설정.</b> 저장소 루트에는 빌드 가이드 md와 실제 앱 폴더
+        (<code>jarvis-vercel/</code>)가 같이 있는데, Vercel은 기본값(<code>.</code>)으로 루트를
+        빌드하려 하고 있었다. <code>jarvis-vercel</code>로 지정했지만 여전히 안 풀림.</li>
+    </ul>
+    <p>
+      세 가지를 다 해결했는데도 새 배포가 또 <code>UNKNOWN</code>으로 멈추자, 더 이상 추측성 설정
+      변경을 반복하지 않고 사용자에게 Vercel 대시보드에서 정확한 메시지를 직접 확인해달라고 요청했다.
+    </p>
+
+    <h3 class="sub"><span class="idx">4.2</span>진짜 원인 — 로컬 git 설정</h3>
+    <div class="callout callout-finding">
+      <span class="tag">Vercel이 보낸 이메일에서 발견</span>
+      <p>
+        Vercel이 실제로 보낸 알림 이메일: <i>"khchan04@naver.com attempted to deploy a commit …
+        but they're not a member of the team."</i> 로컬 git 전역 설정에 예전부터 박혀있던 커밋
+        작성자 이메일이, Vercel 팀의 어떤 멤버 계정과도 매칭되지 않아 <b>배포를 조용히 계속
+        보류</b>시키고 있었다 — GitHub 로그인·앱 권한·Root Directory와는 전혀 무관한, 순수 로컬
+        git 메타데이터 문제였다.
+      </p>
+    </div>
+    <p>
+      GitHub 계정에 연결된 공식 noreply 이메일(<code>gh api user</code>로 계정 id 확인 후
+      <code>{id}+{username}@users.noreply.github.com</code> 형식으로 구성)로 이
+      저장소에 한해 <code>git config user.email</code>을 맞췄다. 새 커밋을 푸시하자 <b>29초 만에
+      정상 배포</b>됐다.
+    </p>
+
+    <div class="callout callout-lesson">
+      <span class="tag">교훈</span>
+      <p>
+        에러 메시지가 모호하거나(그냥 <code>UNKNOWN</code>, 빌드 로그 없음) UI에 뜨는 버튼 문구가
+        실제 원인을 정확히 짚어주지 않을 때는, 겉보기에 무관해 보이는 설정(이번엔 로컬 git 전역
+        설정)까지 의심 범위에 넣어야 한다. 그리고 계속 같은 실패가 반복되면 추측으로 설정을 더
+        바꾸기보다, 시스템이 실제로 보내는 원본 메시지(이번엔 이메일)를 직접 찾아보는 쪽이 빨랐다.
+      </p>
+    </div>
+  </section>
+
+  <section class="track" id="closing">
+    <div class="track-head">
+      <span class="eyebrow chip chip-personal" style="display:inline-flex">마무리</span>
+      <h2>소회</h2>
+    </div>
+    <p>
+      순위나 점수로 남는 프로젝트는 아니지만, 이 문서에 적어둔 과정 자체는 실전에서 부딪히는 문제의
+      전형이라고 생각한다. 특히 2장(VAD)은 "고친 줄 알았는데 다른 증상으로 재발"을 세 번 겪고 나서야
+      접근 자체를 바꾼 경우라, 파라미터 튜닝의 한계를 인정하고 아키텍처를 바꾸는 판단을 언제 내려야
+      하는지 실감할 수 있었다.
+    </p>
+    <p>
+      작업 방식도 이전 프로젝트와 달랐다. Claude Code와 실시간으로 "이 증상이 나온다 → 코드에서
+      원인을 짚는다 → 고친다 → 재배포한다 → 실제로 확인해본다"를 반복하면서, 코드를 직접 짜기보다
+      <b>증상을 정확히 설명하고, 나온 진단이 맞는지 검증하고, 다음 우선순위를 정하는</b> 쪽에 더
+      집중했다. 브라우저 오디오·음성 API들(<code>getUserMedia</code>, <code>SpeechRecognition</code>,
+      <code>SpeechSynthesis</code>)이 문서상 스펙보다 훨씬 지저분하게 동작한다는 것, 그리고 배포
+      파이프라인처럼 "코드와 무관해 보이는" 인프라 문제도 결국 근본 원인을 끝까지 파고들면 항상
+      명확한 답이 있다는 것 — 이번에 가장 크게 남은 것들이다.
+    </p>
+  </section>
+
+  <section id="sources" style="margin-top:64px;">
+    <h3 class="sub"><span class="idx">§</span>자료 출처</h3>
+    <table class="cfgtable">
+      <tr><th>무엇</th><th>어디</th></tr>
+      <tr><td class="key">앱 소스 정본</td><td>GitHub <code>kheechan04/jarvis</code> (private)</td></tr>
+      <tr><td class="key">실행 중인 사이트</td><td><a href="https://jarvis-vercel-blush.vercel.app" target="_blank" rel="noopener">jarvis-vercel-blush.vercel.app</a> (비밀번호로 보호됨)</td></tr>
+      <tr><td class="key">빌드 가이드 &amp; 함정 기록</td><td>저장소 내 <code>JARVIS_BUILD_GUIDE.md</code> —
+        명세, 구현 순서, 이 문서에 담긴 모든 문제의 원인·해결이 표로 정리돼 있고, 앱 소스 원본
+        전체가 부록으로 포함됨</td></tr>
+      <tr><td class="key">최초 출발점</td><td>Instagram에서 본 빌드 가이드/튜토리얼 — 이후의 기능 추가·
+        버그 진단·수정·배포 자동화는 전부 이 문서에 적은 대로 직접 진행</td></tr>
+    </table>
+  </section>
+
+  <footer>
+    <p>Jarvischan(음성 비서) 프로젝트 개인 기록. 2026-09-22~23 동안 실제 배포·테스트·디버깅 과정을
+      그대로 정리했다.</p>
+  </footer>
+
+</div>
+</body>
+</html>
