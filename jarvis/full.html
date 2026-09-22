@@ -312,6 +312,32 @@
       </div>
     </div>
 
+    <h3 class="sub"><span class="idx">용어</span>배경 지식 — VAD와 SpeechRecognition이 뭔지</h3>
+    <p>
+      <b>VAD(Voice Activity Detection, 음성 활동 감지)</b>는 오디오에서 "지금 사람이 말하는 구간"과
+      "무음·잡음 구간"을 구분하는 기술을 통틀어 부르는 말이다. 화상회의 앱이 말하는 사람을 자동으로
+      하이라이트하는 것, 통화 중 무음 구간을 압축하는 것 등 음성 관련 제품 대부분에 어떤 형태로든
+      들어가 있다. 구현 난이도 순으로 보면 <b>진폭(음량) 기준</b>(가장 단순, 배경 소음에 취약) →
+      <b>주파수 대역 기준</b>(목소리 대역만 걸러 듣기) → <b>머신러닝 기반</b>(실제 음성 패턴을 학습한
+      모델이 판단, 가장 정확하지만 직접 구현하기보다 기존 것을 가져다 쓰는 게 보통)까지 있다. 이
+      장에서 겪은 재설계 5번은 정확히 이 세 단계를 순서대로 밟아나간 과정이다.
+    </p>
+    <p>
+      <b><code>SpeechRecognition</code></b>은 <code>window.SpeechRecognition</code>(표준) 또는
+      <code>window.webkitSpeechRecognition</code>(Chrome)으로 접근하는, 브라우저에 내장된 음성인식
+      API다. Chrome에서는 음성 검색·"Ok Google" 받아쓰기에 쓰이는 구글의 실제 엔진이 뒤에서
+      동작하며, 오디오를 구글 클라우드로 스트리밍해 인식한다(완전 로컬 처리가 아니다). 주요 이벤트는
+      <code>onstart</code>(시작) → <code>onspeechstart</code>(말소리 감지) →
+      <code>onresult</code>(인식 결과) → <code>onspeechend</code>(말소리 끝남, 내장 ML 기반 VAD가
+      판단) → <code>onend</code>(세션 종료) 순으로 발생한다. 이 프로젝트에서는 이 API를 세 가지
+      용도로 각각 다르게 쓴다 — 로그인 전/Whisper 실패 시 받아쓰기 폴백(결과 텍스트를 실제로 씀),
+      웨이크워드 감지(idle 상태에서만 계속 듣다가 특정 단어만 매칭), 그리고 이 장의 최종 해법인
+      무음 판정 대체(<code>onspeechend</code> 이벤트만 쓰고 인식된 텍스트는 버림 — 순수하게
+      "언제 멈췄는지"를 알려주는 타이머로만 재사용). 아직 W3C 정식 표준은 아니고(커뮤니티 그룹
+      드래프트 단계), 그래서 브라우저 지원이 Chrome 계열에 치우쳐 있고 세밀한 설정값(예: 무음 판정
+      민감도)도 노출돼 있지 않다.
+    </p>
+
     <h3 class="sub"><span class="idx">2.0</span>최초 설계 — 녹음 시작 300ms의 스냅샷</h3>
     <p>
       최초 구현은 녹음이 시작되고 첫 300ms 동안의 평균 음량을 "조용한 방의 기준(floor)"으로 딱 한 번
