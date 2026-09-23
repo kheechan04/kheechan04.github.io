@@ -103,6 +103,21 @@
   .chip-convo{ background:var(--convo-soft); color:var(--text-dim); border:1px dashed var(--border-strong); }
   .chip-good{ background:var(--good-soft); color:var(--good); }
   .chip-bad{ background:var(--bad-soft); color:var(--bad); }
+  .chip-new{ background:var(--good-soft); color:var(--good); }
+  .chip-fix{ background:var(--bad-soft); color:var(--bad); }
+  .chip-infra{ background:var(--team-soft); color:var(--team-ink); }
+
+  /* ---------- at-a-glance grid ---------- */
+  .glance-intro{ color:var(--text-dim); max-width:680px; margin-bottom:22px; }
+  .glance-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:12px; margin-bottom:8px; }
+  .glance-item{
+    background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:14px 16px; box-shadow:var(--shadow); font-size:.92rem;
+  }
+  .glance-item .glance-tag{ margin-bottom:6px; }
+  .glance-item b{ display:block; margin-bottom:3px; }
+  .glance-item span.d{ color:var(--text-dim); font-size:.86rem; }
+  @media (max-width:720px){ .glance-grid{ grid-template-columns:1fr; } }
 
   /* ---------- timeline ---------- */
   .timeline-outer{ overflow-x:auto; margin-block:28px; padding-bottom:10px; }
@@ -178,12 +193,14 @@
       <summary>목차</summary>
       <div class="toc-panel">
         <a href="#overview"><span class="n">00</span> 개요 &amp; 결과</a>
+        <a href="#my-additions"><span class="n">§</span> 직접 추가한 것 — 한눈에</a>
         <a href="#track-wake"><span class="n">01</span> 웨이크워드 &amp; 마이크 핸드오프</a>
         <a href="#track-vad"><span class="n">02</span> "말이 끝났다"를 어떻게 아는가</a>
         <a href="#track-tts"><span class="n">03</span> 답변이 중간에 끊기는 문제</a>
         <a href="#track-deploy"><span class="n">04</span> 배포 파이프라인이 막혔던 이야기</a>
-        <a href="#closing"><span class="n">05</span> 마무리 소회</a>
-        <a href="#sources"><span class="n">06</span> 자료 출처</a>
+        <a href="#track-agent"><span class="n">05</span> 로컬 에이전트 — 노트북 제어</a>
+        <a href="#closing"><span class="n">06</span> 마무리 소회</a>
+        <a href="#sources"><span class="n">07</span> 자료 출처</a>
       </div>
     </details>
   </div>
@@ -200,14 +217,16 @@
       바로 재배포해서 다시 테스트하는 방식으로 작업했고, 이 문서엔 "어떻게 고쳤는가"뿐 아니라
       "왜 처음 시도가 틀렸는지"까지 남겨뒀다 — 특히 2장(무음 판정)은 같은 문제를 다른 각도로
       네 번 다시 풀다가 결국 접근 자체를 바꾼 과정이라, 나중에 비슷한 문제를 만났을 때 제일 먼저
-      펼쳐볼 장이다.
+      펼쳐볼 장이다. 이후 실기기(아이패드)로 재확인하며 또 한 라운드의 문제를 잡았고, 서버가 닿을 수
+      없는 "내 컴퓨터를 직접 제어하는" 기능(로컬 에이전트)까지 새로 얹으면서 문서를 이어 썼다.
     </p>
 
     <div class="stat-row">
       <div class="stat"><div class="v">0원/월</div><div class="l">운영비 (Vercel Hobby + Groq 무료 티어)</div></div>
-      <div class="stat"><div class="v">5</div><div class="l">"말이 끝났다" 판정 로직 재설계 횟수</div></div>
+      <div class="stat"><div class="v">5+3</div><div class="l">"말이 끝났다" 판정 로직 재설계(데스크톱 5 + 모바일 3)</div></div>
       <div class="stat"><div class="v">80자</div><div class="l">TTS 청크 최종 크기 (한국어 기준, 180자에서 축소)</div></div>
       <div class="stat"><div class="v">4</div><div class="l">Vercel 배포가 막혔던 서로 다른 원인</div></div>
+      <div class="stat"><div class="v">8개</div><div class="l">로컬 에이전트가 지원하는 명령(앱 제어부터 볼륨까지)</div></div>
     </div>
 
     <div class="legend">
@@ -215,6 +234,62 @@
       <span class="chip chip-convo">▨ Claude Code와 실시간 협업 — 문제 재현 → 진단 → 수정 → 재배포 → 재확인</span>
     </div>
   </header>
+
+  <section id="my-additions">
+    <h3 class="sub"><span class="idx">§</span>직접 추가한 것 — 한눈에</h3>
+    <p class="glance-intro">
+      최초 출발점은 Instagram에서 본 빌드 가이드/튜토리얼이었다. 그 이후 실사용하면서 나온 기능 추가·
+      버그 진단·수정·배포 자동화는 전부 아래 항목들이고, 전부 직접 진행했다. 자세한 진단·해결 과정은
+      각 항목 아래 뒤쪽 장에 그대로 남겨뒀다.
+    </p>
+    <div class="glance-grid">
+      <div class="glance-item">
+        <span class="chip chip-new glance-tag">신규 기능</span>
+        <b>웨이크워드 음성 활성화</b>
+        <span class="d">"Jarvischan"/"자비스찬" 호출로 박수·버튼 없이 대화 시작 → <a href="#track-wake">1장</a></span>
+      </div>
+      <div class="glance-item">
+        <span class="chip chip-fix glance-tag">버그 수정</span>
+        <b>마이크 핸드오프 경합</b>
+        <span class="d">웨이크워드→Whisper 전환 시 "성공한 것처럼 보이지만 죽어있는" 녹음 문제 → <a href="#track-wake">1장</a></span>
+      </div>
+      <div class="glance-item">
+        <span class="chip chip-fix glance-tag">재설계 5회</span>
+        <b>무음 판정(VAD) 접근 전환</b>
+        <span class="d">진폭 기준을 네 번 다듬다 한계를 인정하고 브라우저 자체 종료감지로 전환 → <a href="#track-vad">2장</a></span>
+      </div>
+      <div class="glance-item">
+        <span class="chip chip-fix glance-tag">버그 수정</span>
+        <b>모바일(iOS) VAD 안정화</b>
+        <span class="d">AGC·조용함 기준 상한·재보정 속도, 세 겹의 새 원인을 실기기 로그로 확인·수정 → <a href="#track-vad-mobile">2장 후반</a></span>
+      </div>
+      <div class="glance-item">
+        <span class="chip chip-fix glance-tag">버그 수정</span>
+        <b>웨이크워드 인식률 개선</b>
+        <span class="d">엄격한 정규식·장시간 세션 열화 → 핵심 음절 매칭 + 세션 15초마다 교체 → <a href="#track-wake-accuracy">1장 후반</a></span>
+      </div>
+      <div class="glance-item">
+        <span class="chip chip-fix glance-tag">버그 수정</span>
+        <b>TTS 긴 답변 컷오프</b>
+        <span class="d">Chrome 버그를 문장 청크 분할로 우회, 한국어 발화 속도까지 반영 → <a href="#track-tts">3장</a></span>
+      </div>
+      <div class="glance-item">
+        <span class="chip chip-infra glance-tag">인프라</span>
+        <b>배포 파이프라인 디버깅</b>
+        <span class="d">GitHub 연동 후 원인불명 <code>UNKNOWN</code> 배포를 이메일 단서로 추적 → <a href="#track-deploy">4장</a></span>
+      </div>
+      <div class="glance-item">
+        <span class="chip chip-new glance-tag">신규 기능</span>
+        <b>노트북 앱 제어 — 로컬 에이전트</b>
+        <span class="d">앱/URL/파일 열기·닫기, 화면잠금, 스크린샷, 클립보드, 볼륨을 음성으로 제어 → <a href="#track-agent">5장</a></span>
+      </div>
+      <div class="glance-item">
+        <span class="chip chip-fix glance-tag">안정성</span>
+        <b>로컬 에이전트 신뢰성</b>
+        <span class="d">저장 프롬프트 존중하는 종료, 자동 재연결, 윈도우 자동시작 → <a href="#track-agent">5장</a></span>
+      </div>
+    </div>
+  </section>
 
   <section id="timeline-section">
     <h3 class="sub"><span class="idx">TL</span>전체 타임라인</h3>
@@ -228,6 +303,10 @@
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">VAD 접근 전환<br>브라우저 자체 종료감지로</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">TTS 컷오프 발견·수정<br>(청크 분할 → 크기 축소 → 안전장치)</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">이름 변경(Jarvischan)<br>이어서 작업할 준비 문서화</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">아이패드 실기기 재확인<br>모바일 VAD 3중 원인 발견·수정</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">웨이크워드 인식률 개선<br>정규식 완화 + 세션 순환</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">로컬 에이전트 설계·구현<br>노트북 앱 제어 8개 명령</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">에이전트 안정성 다지기<br>DPI·그레이스풀 종료·자동 재연결·자동시작</div></div>
       </div>
     </div>
     <p class="muted">구성: 정적 페이지 <code>index.html</code>(빌드 과정 없음) + Vercel 서버 함수
@@ -292,6 +371,37 @@
       <p>브라우저 API를 이어붙일 때는 "성공적으로 시작됐다"와 "이전 리소스가 실제로 해제됐다"를
         다른 신호로 취급해야 한다. 특히 마이크·카메라처럼 하드웨어를 공유하는 API는 더더욱.</p>
     </div>
+
+    <h3 class="sub" id="track-wake-accuracy"><span class="idx">1.2</span>또박또박 말해야만, 그리고 시간이 지날수록 인식이 안 됨</h3>
+    <p>
+      마이크 경합 문제를 고친 뒤에도 실사용 피드백이 이어졌다 — "처음엔 잘 되는데 그 다음부터 인식을
+      잘 못하는 것 같고, 완전히 또박또박 발음해야만 인식되는 것 같다"는 것. 원인은 두 가지가 겹쳐
+      있었다.
+    </p>
+    <div class="callout callout-finding">
+      <span class="tag">진단 1 — 사전에 없는 이름</span>
+      <p>
+        웨이크워드 정규식이 <code>자비스찬</code>/<code>jarvischan</code> 문자열을 정확히 그대로
+        매칭해야만 통과되도록 짜여 있었다. "자비스찬"은 사전에 없는 만든 이름이라, 구글 음성인식이
+        조금만 웅얼거려도 비슷한 다른 음절("자비스잔", "자비스 찬" 등)로 잘못 받아적기 쉬운데, 그러면
+        곧바로 매칭 실패였다. "또박또박 말해야만 인식된다"는 증상과 정확히 들어맞았다.
+      </p>
+    </div>
+    <div class="callout callout-finding">
+      <span class="tag">진단 2 — 연속 인식 세션의 열화</span>
+      <p>
+        대기 상태에서 계속 듣고 있는 <code>SpeechRecognition</code> 세션(<code>continuous:true</code>)을
+        하나만 계속 붙잡고 쓰고 있었는데, 크롬의 이 API는 같은 세션을 오래 켜둘수록 인식 정확도가
+        눈에 띄게 떨어지는 — 공식 문서엔 안 나오는 — 특성이 있었다. "처음엔 잘 되다가 그 다음부터
+        안 된다"는 증상은 바로 이거였다.
+      </p>
+    </div>
+    <p>
+      해결은 두 갈래였다. 정규식을 <code>자비스</code>/<code>jarvis</code> 같은, 헷갈리기 어려운
+      핵심 음절만 매칭하도록 완화하고 <code>maxAlternatives:3</code>으로 1순위 인식 후보뿐 아니라
+      대안까지 검사하게 했다. 그리고 대기 세션이 15초를 넘기면(실제로 열화가 체감되던 시점보다 훨씬
+      이르게) 자동으로 새 세션으로 교체하도록 감시 루프를 추가했다.
+    </p>
   </section>
 
   <!-- ================= TRACK 2 — VAD ================= -->
@@ -433,6 +543,70 @@
         지금 백업으로 남겨둔 진폭 기준 VAD와 섞어 약간의 여유를 주는 하이브리드로 조정할 계획이다.
       </p>
     </div>
+
+    <h3 class="sub" id="track-vad-mobile"><span class="idx">2.6</span>모바일에서 재발 — 예상과는 다른 원인</h3>
+    <p>
+      노트북(크롬)에서는 문제가 없었다. 그런데 아이패드로 실사용을 재확인하자 "말이 끝났는데 20초
+      하드캡까지 전혀 안 끊긴다"는 증상이 다시 나왔다 — 위 2.5에서 예상했던 "가끔 말하다 멈췄는데
+      끊기는" 것과는 정반대 방향의, 더 심한 재발이었다. <code>?debug=1</code>로 로그 패널을 띄워
+      실기기 로그를 직접 받아보며 원인을 하나씩 좁혔고, 예상과 다른 세 가지가 겹쳐 있었다.
+    </p>
+
+    <h4 class="subsub">원인 1 — iOS엔 애초에 <code>onspeechend</code>가 없음</h4>
+    <p>
+      로그에 <code>speech-end no browser endpointer — VAD only</code>만 찍히고 그 뒤로 조용했다.
+      2.4에서 1차 신호로 쓰기 시작한 브라우저 자체 종료감지가 iOS Safari에는 아예 없거나 있어도
+      이벤트가 안 왔다 — 그래서 모든 기기에서 항상 돌아가던 백업, 즉 <b>진폭 기준 VAD로 고스란히
+      떠넘겨졌다.</b> 그런데 그 백업이 기대했던 "조용한 방 = 거의 0"이라는 전제 자체가 모바일에서는
+      성립하지 않았다 — <code>getUserMedia({audio:true})</code>가 기본으로 켜는
+      <code>autoGainControl</code>이 배경 소음까지 끌어올려서, 원래도 약점이었던 진폭 기준 판정이
+      한 번 더 흔들린 것.
+    </p>
+    <div class="callout callout-finding">
+      <span class="tag">해결 1</span>
+      <p>
+        Whisper 녹음 스트림도 <code>autoGainControl:false</code>로 열어 가공 안 된 원본 음량을 읽게
+        했다. iOS에서는 어차피 못 쓰는 보조 인식 세션 생성 자체를 건너뛰어, 마이크 하드웨어를 두고
+        벌어질 수 있는 불필요한 경합 위험도 같이 없앴다.
+      </p>
+    </div>
+
+    <h4 class="subsub">원인 2 — "조용함" 기준의 상한이 진짜 소음보다 낮았음</h4>
+    <p>
+      AGC를 껐는데도 20초 하드캡까지 그대로였다. 로그를 다시 보니 floor(조용함 기준)가 정확히
+      <code>0.100</code>에 고정된 채 끝까지 움직이지 않고 있었다. 코드에 <code>Math.min(0.1, …)</code>로
+      상한이 박혀 있었던 것 — AGC가 켜져 있던 시절엔 조용한 방의 진짜 음량이 늘 0.1보다 훨씬 낮았기
+      때문에 안전한 상한이었지만, AGC를 끄고 나니 그 기기·환경의 진짜 주변 소음이 0.17~0.6 사이로
+      0.1보다 높았다. floor가 진짜 값을 따라갈 수조차 없는 상태였다.
+    </p>
+    <div class="callout callout-finding">
+      <span class="tag">해결 2</span>
+      <p>상한을 0.7로 올렸다 — 목표값이 아니라 폭주 방지용 안전장치일 뿐이라, 실측된 0.17~0.6 범위에
+        충분한 여유를 두고 잡았다.</p>
+    </div>
+
+    <h4 class="subsub">원인 3 — 기준을 따라잡는 속도 자체가 너무 느림</h4>
+    <p>
+      상한을 풀고 나니 이번엔 <code>stop → vad-quiet</code>가 실제로 찍히긴 하는데, 말이 끝나고
+      <b>17초 뒤에야</b> 찍혔다. floor가 3초 창마다 "이전 값 절반 + 이번 구간 최솟값 절반"으로만
+      재보정하고 있어서, 목표 주변 소음값에 수렴하기까지 5~6번의 창(15초 이상)이 걸리고 있었다.
+    </p>
+    <div class="callout callout-finding">
+      <span class="tag">해결 3</span>
+      <p>창을 1.2초로 줄이고, 절반만 섞는 대신 그 구간의 최솟값으로 바로 스냅하도록 바꿨다. "조용함"
+        확정 대기시간도 1.2초 → 0.8초로 같이 줄여서, 체감 지연을 한 번 더 줄였다.</p>
+    </div>
+
+    <div class="callout callout-lesson">
+      <span class="tag">이 장에서 남은 교훈 (2)</span>
+      <p>
+        2.4/2.5에서 예상했던 대가("가끔 너무 빨리 끊길 수 있다")와 실제로 터진 문제("아예 안 끝난다")는
+        정반대 방향이었다 — <b>미리 세운 가설이 있어도, 실기기·실사용 로그가 나오면 가설을 버릴 준비를
+        해야 한다.</b> 그리고 같은 파라미터(AGC, 상한값, 재보정 속도)라도 "데스크톱에서 안전했던 값"이
+        "모바일에서도 안전하다"는 보장은 전혀 없다는 것 — 특히 브라우저의 오디오 전처리(AGC 등)가
+        플랫폼마다 공격적인 정도가 크게 다르다는 게 셋 다를 관통하는 근본 원인이었다.
+      </p>
+    </div>
   </section>
 
   <!-- ================= TRACK 3 — TTS CUTOFF ================= -->
@@ -551,6 +725,136 @@
     </div>
   </section>
 
+  <!-- ================= TRACK 5 — LOCAL AGENT ================= -->
+  <section class="track" id="track-agent">
+    <div class="track-head">
+      <span class="eyebrow chip chip-personal" style="display:inline-flex">신규 기능 → 세 번의 실기기 버그 수정</span>
+      <h2>서버가 못 닿는 곳 — 로컬 에이전트로 노트북 제어</h2>
+      <p class="desc">
+        "가벼운 대화 말고는 할 수 있는 게 없어서 비서라 하기 민망하다"는 게 출발점이었다. 앱을
+        열고 닫고, 화면을 잠그고, 스크린샷을 찍는 — 사용자의 실제 컴퓨터에 손을 대는 기능을
+        새로 설계하고 만든 기록이다.
+      </p>
+      <div class="track-meta">
+        <span>계기 <b>"노트북/폰/패드 앱에 접근하고 실행하는 기능을 넣고 싶다"</b></span>
+        <span>새 구성요소 <b>local-agent/ (Node WebSocket 서버)</b></span>
+        <span>지원 명령 <b>8개</b></span>
+      </div>
+    </div>
+
+    <h3 class="sub"><span class="idx">5.0</span>설계 — 왜 서버가 아니라 별도 프로그램인가</h3>
+    <p>
+      기존 도구(날씨·환율 등)는 전부 Vercel 서버(<code>api/chat.js</code>)에서 직접 실행된다. 그런데
+      서버는 인터넷에 열려있지 않은 사용자의 개인 컴퓨터에는 원천적으로 닿을 방법이 없는, 상태 없는
+      클라우드 함수다. 그래서 "앱을 열어줘"는 서버가 아니라 <b>사용자의 컴퓨터에서 직접 실행되는
+      별도 프로그램</b>이 처리해야 한다는 결론에 먼저 도달했다.
+    </p>
+    <p>
+      노트북에서 실행하는 작은 Node WebSocket 서버(<code>local-agent/</code>)를 만들고, 웹페이지가
+      브라우저에서 <code>ws://localhost:8765</code>로 직접 붙게 했다. 크롬은 https 페이지에서
+      <code>localhost</code>로의 연결은 mixed-content 정책 예외로 허용해서, 별도 인증서 없이 바로
+      됐다. LLM이 <code>open_app</code> 같은 도구를 호출하면 서버는 실행하지 않고 <code>{"{"}type:"device"{"}"}</code>
+      형태의 액션만 만들어 브라우저로 돌려주고(이미 있던 타이머 도구와 같은 패턴), 브라우저가 그
+      액션을 에이전트로 중계해서 실제로 실행한다.
+    </p>
+    <p>
+      권한 범위는 처음부터 <b>화이트리스트로 제한</b>했다 — 앱 실행도 등록된 것만, 임의 셸 명령
+      실행·파일 삭제·컴퓨터 종료/재시작·포커스된 창에 텍스트 자동 입력은 의도적으로 넣지 않았다.
+      음성 인식이 잘못 들었을 때 되돌리기 어렵거나 위험한 동작이라, 나중에 별도 확인 절차부터
+      설계하면서 넣는 게 맞다고 판단했다.
+    </p>
+
+    <h3 class="sub"><span class="idx">5.1</span>스크린샷이 화면 일부만 담김</h3>
+    <p>
+      스크린샷 기능을 테스트해보니 화면 전체가 아니라 일부만 잘려서 저장됐다. PowerShell로 직접
+      두 값을 비교해서 원인을 확인했다.
+    </p>
+    <div class="callout callout-finding">
+      <span class="tag">진단 — DPI 비인식</span>
+      <p>
+        PowerShell 프로세스는 기본적으로 DPI-aware가 아니어서, 배율 100%를 넘는 디스플레이(요즘
+        노트북 대부분)에서 .NET이 실제 해상도 대신 축소된 "논리 해상도"를 기준으로 캡처하고 있었다.
+        실측: 실제 화면은 2560×1600인데 DPI 인식 전엔 1707×1067로 잡혔다(정확히 150% 배율만큼
+        축소된 값).
+      </p>
+    </div>
+    <p>
+      캡처 스크립트 맨 앞에서 <code>user32.dll</code>의 <code>SetProcessDPIAware()</code>를 호출해
+      프로세스를 DPI-aware로 전환했다. 여러 모니터를 쓰는 경우까지 대비해 <code>PrimaryScreen.Bounds</code>
+      대신 전체 가상 화면을 뜻하는 <code>SystemInformation.VirtualScreen</code>을 쓰도록 같이 바꿨다.
+    </p>
+
+    <h3 class="sub"><span class="idx">5.2</span>앱을 강제로 끄면 저장 안 한 내용이 그냥 날아감</h3>
+    <p>
+      기능을 다 붙이고 나서 스스로 리뷰하며 짚은 문제다 — <code>close_app</code>이 처음부터
+      <code>taskkill /F</code>를 무조건 쓰고 있었다. 이건 앱에게 "닫아도 되냐"고 묻지 않고 그냥
+      죽이는 강제종료라서, 메모장이나 VS Code에 저장 안 한 내용이 있어도 저장 여부를 물어보는 창조차
+      뜨지 못하고 그대로 사라진다.
+    </p>
+    <div class="callout callout-warn">
+      <span class="tag">이건 실제 사고로 이어질 수 있는 위험</span>
+      <p>
+        음성 비서 특성상 "메모장 닫아줘"라는 흔한 명령 한마디로 작업 내용이 통째로 날아갈 수 있는
+        구조였다. 버그 리포트를 받은 게 아니라, 기능을 검증하며 스스로 짚어서 배포 전에 고쳤다.
+      </p>
+    </div>
+    <p>
+      기본 동작을 <code>/F</code> 없는 정상 종료 요청(<code>WM_CLOSE</code>)으로 바꿨다 — 이러면 앱이
+      자기 방식대로 저장 여부를 물어볼 수 있다. 그리고 실제로 프로세스가 사라졌는지 확인한 뒤에만
+      성공으로 보고하고, 안 사라졌으면 "저장 프롬프트가 떠 있을 수 있다"고 알린다. 강제종료는
+      <code>force:true</code>를 명시적으로 받을 때만 — 그리고 그 값은 사용자가 "강제로 꺼줘"라고
+      확실히 말했을 때만 LLM이 넘기도록 도구 설명에 못박았다.
+    </p>
+
+    <h3 class="sub"><span class="idx">5.3</span>연결 버튼이 "connecting"에 멈춤</h3>
+    <p>
+      기능 테스트 중간에 에이전트를 여러 번 재시작하면서(재시작할 때마다 새 페어링 토큰이 생성됨)
+      브라우저에 저장된 옛 토큰이 못 쓰게 되는 상황이 자연스럽게 반복됐는데, 그때마다 "Local agent"
+      버튼이 <code>connecting…</code>에 멈춰서 두세 번 눌러야 겨우 토큰 재입력 창이 떴다.
+    </p>
+    <div class="callout callout-finding">
+      <span class="tag">진단</span>
+      <p>
+        인증 실패 시 저장된 토큰만 지우고 "켜짐" 상태(<code>laOn</code>)는 그대로 남겨두고 있었다.
+        그러니 버튼은 계속 "connecting…"만 보여주고, 재입력 창을 다시 띄우려면 먼저 꺼짐으로
+        되돌리는 클릭이 한 번 더 필요했다.
+      </p>
+    </div>
+    <p>
+      인증 실패를 "켜짐 상태가 유지된 반쯤 실패"가 아니라 완전한 "꺼짐"으로 취급하도록 바꿨다 —
+      소켓을 닫고 <code>laOn</code>도 같이 꺼서, 바로 다음 클릭 한 번이면 토큰 재입력 창이 뜬다.
+    </p>
+
+    <h3 class="sub"><span class="idx">5.4</span>마무리 — 자동 재연결과 자동 시작</h3>
+    <p>
+      기능 검증이 끝난 뒤, 스스로 돌아보며 세 가지를 더 다졌다. 손 안 대고 쓰는 게 이 프로젝트
+      전체의 컨셉인데, 로컬 에이전트만 매번 사람이 개입해야 하는 지점으로 남아 있었기 때문이다.
+    </p>
+    <ul>
+      <li><b>연결 끊김 자동 복구</b> — 에이전트 재시작·노트북 절전 같은 예기치 않은 연결 끊김을
+        그냥 두지 않고 5초 뒤 자동 재시도하도록 함</li>
+      <li><b>페이지 열 때 자동 접속</b> — 저장된 토큰이 있으면 버튼을 누르지 않아도 페이지가 열리는
+        즉시 자동으로 붙게 함</li>
+      <li><b>윈도우 로그인 시 자동 실행</b> — 시작프로그램 폴더에 바로가기를 추가하는 설치
+        스크립트를 만들어, 노트북을 켜는 것만으로 에이전트까지 같이 뜨게 함(실제로 설치하고
+        로그인 시나리오처럼 바로가기로 실행해 정상 동작을 확인)</li>
+    </ul>
+    <p>
+      세 가지를 합치면: 한 번만 페어링해두면 그 이후로는 노트북을 켜고 자비스찬 페이지를 여는 것만으로
+      완전히 자동으로 연결된다.
+    </p>
+
+    <div class="callout callout-lesson">
+      <span class="tag">이 장에서 남은 교훈</span>
+      <p>
+        "기능이 동작한다"와 "안전하게 동작한다"는 다른 기준이다 — <code>close_app</code>의 강제종료
+        문제는 버그 리포트가 아니라 기능을 다 만들고 나서 스스로 검토하다가 발견했는데, 음성
+        비서처럼 사용자 의도를 매번 정확히 파악하기 어려운 인터페이스일수록 "잘못 들었을 때 얼마나
+        되돌리기 어려운가"를 기능 하나하나마다 따로 판단해야 한다는 걸 다시 확인했다.
+      </p>
+    </div>
+  </section>
+
   <section class="track" id="closing">
     <div class="track-head">
       <span class="eyebrow chip chip-personal" style="display:inline-flex">마무리</span>
@@ -569,7 +873,16 @@
       집중했다. 브라우저 오디오·음성 API들(<code>getUserMedia</code>, <code>SpeechRecognition</code>,
       <code>SpeechSynthesis</code>)이 문서상 스펙보다 훨씬 지저분하게 동작한다는 것, 그리고 배포
       파이프라인처럼 "코드와 무관해 보이는" 인프라 문제도 결국 근본 원인을 끝까지 파고들면 항상
-      명확한 답이 있다는 것 — 이번에 가장 크게 남은 것들이다.
+      명확한 답이 있다는 것 — 여기까지가 첫 번째 라운드에서 가장 크게 남은 것들이다.
+    </p>
+    <p>
+      실기기(아이패드)로 재확인한 두 번째 라운드는 조금 다른 교훈을 남겼다. 데스크톱에서 안전하다고
+      확인한 값(AGC 여부, floor 상한, 재보정 속도)이 모바일에서는 하나도 안전하지 않았다 — 같은
+      코드라도 플랫폼이 바뀌면 처음부터 다시 실측해야 한다는 걸 몸으로 확인한 셈이다. 그리고 로컬
+      에이전트는 "서버가 못 닿는 곳"이라는 명확한 아키텍처 한계에서 출발해 화이트리스트·페어링
+      토큰·Origin 검사로 처음부터 범위를 좁혀 설계했는데, 그럼에도 <code>close_app</code>의 강제종료
+      문제(5.2)는 버그 리포트가 아니라 스스로 검토하다가 뒤늦게 찾았다 — 기능이 "된다"와 "안전하게
+      된다" 사이의 간극은 항상 따로 확인해야 한다는 걸 다시 배웠다.
     </p>
   </section>
 
@@ -581,7 +894,9 @@
       <tr><td class="key">실행 중인 사이트</td><td><a href="https://jarvis-vercel-blush.vercel.app" target="_blank" rel="noopener">jarvis-vercel-blush.vercel.app</a> (비밀번호로 보호됨)</td></tr>
       <tr><td class="key">빌드 가이드 &amp; 함정 기록</td><td>저장소 내 <code>JARVIS_BUILD_GUIDE.md</code> —
         명세, 구현 순서, 이 문서에 담긴 모든 문제의 원인·해결이 표로 정리돼 있고, 앱 소스 원본
-        전체가 부록으로 포함됨</td></tr>
+        전체가 부록으로 포함됨(로컬 에이전트는 별도 프로그램이라 부록 밖, §9)</td></tr>
+      <tr><td class="key">로컬 에이전트 소스 &amp; 사용법</td><td>저장소 내 <code>local-agent/</code> —
+        <code>agent.js</code>, 앱 허용 목록 <code>apps.json</code>, 사용법 <code>README.md</code></td></tr>
       <tr><td class="key">최초 출발점</td><td>Instagram에서 본 빌드 가이드/튜토리얼 — 이후의 기능 추가·
         버그 진단·수정·배포 자동화는 전부 이 문서에 적은 대로 직접 진행</td></tr>
     </table>
