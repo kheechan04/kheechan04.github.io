@@ -120,9 +120,9 @@
     </div>
     <div class="badge-row">
       <div class="badge"><div class="v">0원/월</div><div class="l">운영비 (Vercel Hobby + Groq 무료)</div></div>
-      <div class="badge"><div class="v">5+3</div><div class="l">무음 판정(VAD) 재설계 횟수(데스크톱+모바일)</div></div>
+      <div class="badge"><div class="v">4+3</div><div class="l">무음 판정(VAD) 재설계 횟수(데스크톱+모바일)</div></div>
       <div class="badge"><div class="v">7</div><div class="l">키 없이 쓰는 무료 도구</div></div>
-      <div class="badge"><div class="v">8</div><div class="l">로컬 에이전트 지원 명령</div></div>
+      <div class="badge"><div class="v">9</div><div class="l">로컬 에이전트 지원 명령</div></div>
     </div>
   </header>
 
@@ -140,18 +140,18 @@
         새로 설계·구현한 프로젝트입니다.
       </p>
       <div class="stat-strip">
-        <div class="stat-pill"><div class="v up">5+3회</div><div class="l">"말이 끝났다" 판정 로직 재설계(데스크톱+모바일)</div></div>
+        <div class="stat-pill"><div class="v up">4+3회</div><div class="l">"말이 끝났다" 판정 로직 재설계(데스크톱+모바일)</div></div>
         <div class="stat-pill"><div class="v">180자 → 80자</div><div class="l">TTS 청크 크기(한국어 발화 속도 반영)</div></div>
         <div class="stat-pill"><div class="v">4가지</div><div class="l">배포가 막혔던 서로 다른 원인</div></div>
-        <div class="stat-pill"><div class="v up">8개</div><div class="l">로컬 에이전트 명령(앱 제어~볼륨)</div></div>
+        <div class="stat-pill"><div class="v up">9개</div><div class="l">로컬 에이전트 명령(앱 제어~볼륨)</div></div>
       </div>
       <ul class="highlights">
         <li>웨이크워드 인식기와 Whisper 녹음이 마이크를 두고 벌이던 비동기 경합을 진단 —
           "성공한 것처럼 보이지만 실제로는 죽어있는" 상태의 원인을 찾아 수정.</li>
-        <li>진폭(음량) 기준 무음 판정을 네 번 다듬다가, 한계를 인정하고 브라우저 자체의
+        <li>진폭(음량) 기준 무음 판정을 세 번 다듬다가, 한계를 인정하고 브라우저 자체의
           음성종료 감지(<code>onspeechend</code>) API로 접근을 전환 — 파라미터 튜닝과
           아키텍처 전환의 갈림길을 실제로 겪은 사례. 이후 실기기(아이패드)에서 iOS엔 그 API
-          자체가 없다는 걸 발견하고, AGC·기준 상한·재보정 속도 세 겹을 더 고쳤다.</li>
+          자체가 없다는 걸 발견하고, AGC·기준 상한·재보정 속도 세 겹을 더 수정.</li>
         <li>Vercel 배포가 원인 불명으로 계속 멈추던 문제를, 후보를 하나씩 제거해나가며
           결국 Vercel이 보낸 이메일에서 로컬 git 커밋 이메일 불일치라는 진짜 원인을 특정.</li>
         <li>Vercel 서버가 사용자 컴퓨터에 닿을 수 없다는 아키텍처 한계에서 출발해, 노트북에서
@@ -166,7 +166,7 @@
       </div>
       <div class="card-foot">
         <a class="readmore" href="full.html">상세 시행착오 기록 보기</a>
-        <span class="repo-link">github.com/kheechan04/<a href="https://github.com/kheechan04/jarvischan" target="_blank" rel="noopener">jarvischan</a> · MIT</span>
+        <span class="repo-link">github.com/kheechan04/<a href="https://github.com/kheechan04/jarvischan" target="_blank" rel="noopener">jarvischan</a> (공개 · MIT 라이선스)</span>
       </div>
     </article>
 
