@@ -199,6 +199,7 @@
         <a href="#track-tts"><span class="n">03</span> 답변이 중간에 끊기는 문제</a>
         <a href="#track-deploy"><span class="n">04</span> 배포 파이프라인이 막혔던 이야기</a>
         <a href="#track-agent"><span class="n">05</span> 로컬 에이전트 — 노트북 제어</a>
+        <a href="#track-ios-audio"><span class="n">06</span> 아이폰에서 대답 소리가 안 나던 문제</a>
         <a href="#closing"><span class="n">06</span> 마무리 소회</a>
         <a href="#sources"><span class="n">07</span> 자료 출처</a>
       </div>
@@ -288,6 +289,16 @@
         <b>로컬 에이전트 신뢰성</b>
         <span class="d">저장 프롬프트 존중하는 종료, 자동 재연결, 윈도우 자동시작 → <a href="#track-agent">5장</a></span>
       </div>
+      <div class="glance-item">
+        <span class="chip chip-fix glance-tag">버그 수정</span>
+        <b>아이폰 대답 소리·연속 대화</b>
+        <span class="d">가설 두 개가 증상을 바꾸기만 하다가, 순서를 바꾼 실험 하나로 진짜 원인을 특정 → <a href="#track-ios-audio">6장</a></span>
+      </div>
+      <div class="glance-item">
+        <span class="chip chip-new glance-tag">신규 기능</span>
+        <b>메신저 링크 미리보기</b>
+        <span class="d">Open Graph 태그·1200×630 미리보기 이미지·favicon으로 카카오톡 공유 카드 → <a href="#track-ios-audio-share">6장 끝</a></span>
+      </div>
     </div>
   </section>
 
@@ -307,6 +318,8 @@
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">웨이크워드 인식률 개선<br>정규식 완화 + 세션 순환</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">로컬 에이전트 설계·구현<br>노트북 앱 제어 9개 명령</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-23</div><div class="tl-label">에이전트 안정성 다지기<br>DPI·그레이스풀 종료·자동 재연결·자동시작</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-26</div><div class="tl-label">링크 미리보기 추가<br>카카오톡 공유 카드·favicon</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-26</div><div class="tl-label">아이폰 대답 소리·연속 대화<br>실기기 로그와 순서 실험으로 해결</div></div>
       </div>
     </div>
     <p class="muted">구성: 정적 페이지 <code>index.html</code>(빌드 과정 없음) + Vercel 서버 함수
@@ -855,6 +868,84 @@
     </div>
   </section>
 
+  <!-- ================= TRACK 6 — iOS SPOKEN REPLIES ================= -->
+  <section class="track" id="track-ios-audio">
+    <div class="track-head">
+      <span class="eyebrow chip chip-personal" style="display:inline-flex">실기기 버그 → 가설 검증</span>
+      <h2>아이폰에서 대답 소리가 안 나던 문제</h2>
+      <p class="desc">
+        노트북에서는 멀쩡한데 폰과 패드에서는 대답이 화면에만 뜨고 소리가 나지 않았다. 원인 후보를
+        세 번 고쳐 배포했지만 증상은 매번 모양만 바뀌었다. 결국 풀린 건 코드를 더 읽어서가 아니라,
+        같은 동작을 순서만 바꿔 두 번 해 본 실험 하나 덕분이었다.
+      </p>
+      <div class="track-meta">
+        <span>기기 <b>아이폰 Safari</b></span>
+        <span>관련 API <b>SpeechSynthesis · SpeechRecognition · getUserMedia · Web Audio</b></span>
+      </div>
+    </div>
+
+    <h3 class="sub"><span class="idx">6.0</span>1차 가설 — 제스처 밖 재생과 켜진 채 남은 마이크</h3>
+    <p>
+      모바일 브라우저는 소리 재생을 사용자 탭 안에서 한 번 시작해야 허용한다. 대답은 서버 응답을
+      기다린 뒤 말하므로 탭 밖이다. 그래서 첫 탭에 음량 0짜리 빈 문장을 말해 음성 엔진을 열어 두고,
+      녹음이 끝나면 마이크 스트림을 닫게 했다. 마이크가 켜져 있으면 폰이 통화 모드로 바뀌어 소리가
+      수화기로 가기 때문이다. 텍스트로 대화할 때는 이걸로 소리가 났다.
+    </p>
+
+    <h3 class="sub"><span class="idx">6.1</span>2차 가설 — 오디오 세션 전환, 그리고 더 나빠짐</h3>
+    <p>
+      웨이크워드를 켜면 첫 대화만 되고 그 뒤로는 불러도 반응이 없었다. Safari의
+      <code>navigator.audioSession</code>으로 말할 때는 재생 모드, 들을 때는 녹음 모드로 세션을
+      바꿔 주는 수정을 넣었는데, 이번엔 <b>소리마저 다시 안 났고</b> 마이크 버튼을 눌러도 말을 못
+      알아들었다. <code>?debug=1</code> 로그 패널로 웨이크워드 인식기의 시작·오디오 입력·종료·받아
+      적은 글자까지 전부 찍어 보니, 인식기는 켜져 있고 소리도 들어가는데 결과가 오지 않았다.
+    </p>
+    <div class="callout callout-warn">
+      <span class="tag">되돌림</span>
+      <p>
+        세션 전환을 전부 빼고, 녹음이 끝날 때 <code>AudioContext</code>까지 닫던 것도 멈췄다(탭 밖에서
+        새로 만든 컨텍스트는 iOS가 정지 상태로 두어 음량이 0으로 읽힌다). 연속 대화는 이걸로
+        돌아왔다. 하지만 소리는 여전히 안 났고, 무음 모드도 수화기도 아니었다.
+      </p>
+    </div>
+
+    <h3 class="sub"><span class="idx">6.2</span>진짜 원인 — 무엇이 먼저 켜지느냐</h3>
+    <p>
+      같은 페이지에서 두 가지 순서로 직접 시험했다. <b>텍스트로 먼저 한 마디 대화하면</b> 그 뒤로
+      웨이크워드 연속 대화와 대답 소리가 모두 정상이었다. <b>새로고침하고 처음부터 음성으로
+      시작하면</b> 소리는 처음부터 안 나고 웨이크워드도 첫 번째만 반응했다. 목소리 설정이나 코드
+      경로가 아니라 <b>순서</b>가 원인이었다 — iOS에서는 음성 합성이 마이크·음성 인식보다 먼저 한 번
+      실제로 소리를 내야 한다. 첫 탭의 "음량 0 빈 문장"은 iOS가 그냥 건너뛰어서 이 역할을 못 했다.
+    </p>
+    <div class="callout callout-finding">
+      <span class="tag">해결</span>
+      <p>
+        페이지를 연 뒤 처음 마이크·웨이크워드·박수 버튼을 누르면, 그 탭 안에서 "네.", "자비스찬이라고
+        불러 주세요." 같은 짧은 확인 음성을 먼저 말하고 끝난 뒤에 마이크를 연다. 음성이 한 번이라도
+        나온 뒤에는 다시 하지 않는다. 아이폰에서 웨이크워드 연속 대화와 대답 소리를 모두 확인했다.
+      </p>
+    </div>
+
+    <h3 class="sub" id="track-ios-audio-share"><span class="idx">6.3</span>곁가지 — 메신저 링크 미리보기</h3>
+    <p>
+      같은 날 앱 주소를 카카오톡으로 보내면 카드 없이 글자로만 보이는 문제도 고쳤다. Open Graph 태그를
+      넣자 PC 카톡은 카드가 떴지만 폰에서는 여전히 글자였다. 폰에서 카드가 잘 뜨던 다른 프로젝트
+      (Shadow Mitts)와 태그를 나란히 비교하니 차이는 미리보기 이미지였다 — 512px 정사각 아이콘 대신
+      1200×630 가로 이미지와 <code>summary_large_image</code>로 맞추자 폰에서도 카드가 떴다. 링크 옆
+      아이콘이 안 뜨던 건 루트의 <code>/favicon.ico</code>가 404였기 때문이다.
+    </p>
+
+    <div class="callout callout-lesson">
+      <span class="tag">교훈</span>
+      <p>
+        원인을 추측해서 고치는 수정이 쌓이면, 증상이 바뀌어도 어느 수정 때문인지 가리기 어려워진다.
+        이번엔 그럴듯한 가설 두 개가 증상만 바꿨고, 오히려 한 번은 멀쩡하던 것까지 망가뜨렸다. 막힌
+        상황을 푼 건 <b>변수 하나(무엇이 먼저 켜지는가)만 바꾼 대조 실험</b>이었다 — 로그로 "어디서
+        멈추는지"를 보고, 대조 실험으로 "왜 멈추는지"를 가르는 순서가 가장 빨랐다.
+      </p>
+    </div>
+  </section>
+
   <section class="track" id="closing">
     <div class="track-head">
       <span class="eyebrow chip chip-personal" style="display:inline-flex">마무리</span>
@@ -884,6 +975,12 @@
       문제(5.2)는 버그 리포트가 아니라 스스로 검토하다가 뒤늦게 찾았다 — 기능이 "된다"와 "안전하게
       된다" 사이의 간극은 항상 따로 확인해야 한다는 걸 다시 배웠다.
     </p>
+    <p>
+      세 번째 라운드(6장, 아이폰 대답 소리)에서는 내가 한 가장 중요한 일이 코드 수정이 아니라
+      실험이었다. 추측으로 고친 배포가 세 번 이어지는 동안 증상은 모양만 바뀌었고, "텍스트로 먼저 하면
+      되고 음성으로 먼저 하면 안 된다"는 걸 직접 확인해 전달한 순간 원인이 바로 좁혀졌다. 실기기에서만
+      나는 문제는 결국 실기기를 든 사람이 설계한 대조 실험으로 풀린다는 걸 배웠다.
+    </p>
   </section>
 
   <section id="sources" style="margin-top:64px;">
@@ -903,7 +1000,7 @@
   </section>
 
   <footer>
-    <p>Jarvischan(음성 비서) 프로젝트 개인 기록. 2026-09-22~23 동안 실제 배포·테스트·디버깅 과정을
+    <p>Jarvischan(음성 비서) 프로젝트 개인 기록. 2026-09-22~26 동안 실제 배포·테스트·디버깅 과정을
       그대로 정리했다.</p>
   </footer>
 
