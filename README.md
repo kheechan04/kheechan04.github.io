@@ -9,7 +9,8 @@
 ├── index.html          ← 프로젝트 목차(허브) 페이지
 ├── iaic-2026/          2026 인하 인공지능 챌린지 — 로봇팔 월드모델
 ├── jarvischan/         Jarvischan — 영화 스타일 음성 비서
-└── shadow-mitts/       Shadow Mitts — 웹캠 복싱 미트 게임
+├── shadow-mitts/       Shadow Mitts — 웹캠 복싱 미트 게임
+└── sonmat-real-casting/ 손맛: 리얼 캐스팅 — 웹캠 낚시 게임
 ```
 
 프로젝트 폴더마다 두 쪽이 있어요.
