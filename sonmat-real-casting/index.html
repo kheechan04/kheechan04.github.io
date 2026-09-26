@@ -150,7 +150,7 @@
         <div class="stat-pill"><div class="v">83 → 55회</div><div class="l">10fps에서 바퀴 세기 방식이 놓친 빠른 릴링 → 속도 방식으로 교체</div></div>
         <div class="stat-pill"><div class="v up">4종</div><div class="l">시뮬레이션으로 찾은 "사실상 못 잡던" 큰 어종 → 재조정</div></div>
         <div class="stat-pill"><div class="v">22 → 2.4MB</div><div class="l">배경 사진 (물가선 위만 WebP)</div></div>
-        <div class="stat-pill"><div class="v">33종</div><div class="l">실물 3D 스캔·CC 모델로 쓴 물고기 (46종 중)</div></div>
+        <div class="stat-pill"><div class="v">35종</div><div class="l">실물 스캔·CC·사진 기반 3D로 쓴 물고기 (46종 중)</div></div>
       </div>
       <ul class="highlights">
         <li>설계서의 미확인 가정은 코드보다 녹화로 먼저 확인 — 13개 녹화에서 카메라 깊이(z)가 실제의 절반 이하로
@@ -169,7 +169,8 @@
           페이지 CSP로 연결 가능한 곳 제한, 소스에 전송 코드가 없음을 테스트로 검사. 얼굴을 물고기에 붙이는
           방식은 플레이 피드백으로 여섯 번 다듬음.</li>
         <li>마감: 사진 한 장을 셰이더로 보정해 낮·노을·밤(별·달·전자찌)을 만들어 8K 사본 없이 시간대 구현,
-          PWA로 오프라인 재시작을 배포판에서 확인.</li>
+          PWA로 오프라인 재시작을 배포판에서 확인. Vercel 썸네일이 안 뜨던 문제는 Shadow Mitts와 로딩을 비교해 무거운 첫 화면을 의심하고,
+          3D를 첫 화면 뒤로 미뤄 페이지 로드 2.6 → 0.4초.</li>
       </ul>
       <figure class="shot">
         <img src="img/time-of-day.jpg" alt="같은 저수지의 낮, 노을, 밤 세 장면을 나란히 놓은 이미지. 밤에는 달과 물 위 달빛 길이 보인다." width="1920" height="320" loading="lazy">

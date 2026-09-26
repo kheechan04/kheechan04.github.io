@@ -209,7 +209,7 @@
         <a href="#track-body"><span class="n">04</span> 몸으로 하는 낚시 — 노리기와 버티기</a>
         <a href="#track-world"><span class="n">05</span> 실사 세계 — 배경·물·물고기</a>
         <a href="#track-face"><span class="n">06</span> 인면어와 개인정보</a>
-        <a href="#track-ship"><span class="n">07</span> 시간대, PWA, 배포</a>
+        <a href="#track-ship"><span class="n">07</span> 시간대, PWA, 배포, 첫 화면</a>
         <a href="#closing"><span class="n">08</span> 돌아보며</a>
         <a href="#sources"><span class="n">09</span> 자료 출처</a>
       </div>
@@ -278,7 +278,7 @@
       <div class="glance-item">
         <span class="chip chip-infra glance-tag">그래픽 · 성능</span>
         <b>실사 배경과 실물 스캔 물고기</b>
-        <span class="d">CC0 360° 사진 + 3D 물, 물고기 33종 실물 스캔·CC 모델, 첫 낚음 끊김 5.7 → 0.3초 → <a href="#track-world">5장</a></span>
+        <span class="d">CC0 360° 사진 + 3D 물, 물고기 35종 실물 스캔·CC·사진 기반 3D, 첫 낚음 끊김 5.7 → 0.3초 → <a href="#track-world">5장</a></span>
       </div>
       <div class="glance-item">
         <span class="chip chip-infra glance-tag">개인정보</span>
@@ -307,6 +307,7 @@
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">02:38</div><div class="tl-label">펌핑 제거<br>규칙 단순화</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">12:40</div><div class="tl-label">M4 인면어<br>개인정보 확인</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">17:47</div><div class="tl-label">M5 시간대·PWA<br>Vercel 배포</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">23:30</div><div class="tl-label">어종 46종<br>첫 로딩 줄이기</div></div>
       </div>
     </div>
     <p class="muted">구성: TypeScript + Vite(프레임워크 없음), 포즈 인식 MediaPipe Pose Landmarker(브라우저 WASM, Web Worker —
@@ -507,7 +508,7 @@
       <p class="desc">"진짜 사진급으로", "물도 실제로 흐르고", "진짜 실제 물고기처럼" — 그래픽 요청은 모두 실사 쪽이었다.</p>
       <div class="track-meta">
         <span>배경 <b>Poly Haven CC0</b></span>
-        <span>물고기 <b>실물 스캔·CC 모델 33종</b></span>
+        <span>물고기 <b>실물 스캔·CC·사진 기반 3D 35종</b></span>
       </div>
     </div>
 
@@ -531,6 +532,11 @@
       문어·무늬오징어·가시복·곰치·노랑가오리·덤보문어·흡혈오징어·실러캔스·대왕오징어 등. 15종은 같은 방식으로 찾은 실물 스캔·CC 모델(CC0 8, CC-BY 7)이고,
       자라·문어·오징어·가오리처럼 납작한 동물은 옆에서 보면 선처럼 얇아서 위에서 본 모습으로 돌렸다. 한 스캔은 텍스처가 옛 재질 형식이라
       흰색으로 나와 변환했고, 한 스캔은 텍스처 조각이 너무 많아 일반 단순화가 1%만 줄여서 이음매를 무시하는 단순화로 100만 → 10만 삼각형으로 줄였다.
+    </p>
+    <p>
+      무료 모델이 없거나 품질이 낮은 16종은 라이선스 확인된 사진(퍼블릭 도메인·CC0·CC-BY)을 TRELLIS.2로 3D로 만든다. 무료 GPU 사용량이 하루 몇 분이라
+      "게임에서 자주 보이는데 모델이 어색한 것부터, 사진으로 만들기 어려운 모양(긴 리본·촉수·투명한 머리)은 뒤로" 순서를 정했고, 지금까지 금눈돔·비키르를 넣었다.
+      비키르는 몸 전체가 나온 무료 사진이 알비노뿐이라 그 사진으로 만들고 게임에서 올리브색으로 칠했다.
     </p>
 
     <h3 class="sub"><span class="idx">5.2</span>"물고기 낚아챌 때쯤 버벅거림"</h3>
@@ -630,6 +636,20 @@
       빌드판과 배포된 실제 주소에서 각각 <b>네트워크를 끊고 다시 열어</b> 시작 화면이 뜨는 것, 크롬이 보고하는 설치 가능성 오류가 0인 것을 확인했다.
       Vercel은 GitHub 저장소에 연결해 main에 push하면 자동 배포되게 했다(push 후 약 20초에 반영).
     </p>
+
+    <h3 class="sub"><span class="idx">7.3</span>"overview에 사진이 안 떠" — 무거운 첫 화면</h3>
+    <p>
+      Vercel 대시보드의 배포 썸네일이 계속 "No screenshot available"이었다. 같은 설정의 Shadow Mitts는 떠서 보호 설정은 원인이 아니었다.
+      두 사이트를 헤드리스 브라우저로 나란히 열어 보니, 네트워크가 잠잠해지기까지 Shadow Mitts 약 4초 · 이 게임 약 9.5초, 그래픽카드 없는
+      환경의 화면 속도 60 vs 22fps — 8K 배경과 반사하는 물이 첫 화면부터 무거웠다. 썸네일을 찍는 쪽도 그래픽카드가 없을 것이라 보고,
+      ① 3D가 준비될 때까지 게임 장면 정지 사진을 배경으로, ② 그래픽카드가 없으면 배경 4K·픽셀 비율 1, ③ 무거운 3D 로딩을 페이지 로드와
+      첫 화면 뒤로, ④ 빌드판의 자동화 브라우저(스크린샷 봇)에는 정지 사진과 시작 화면만 보여 주게 했다. 페이지 로드는 2.6 → 0.4초(로컬 빌드).
+      그 뒤 빌드 캐시 없이 재배포하자 썸네일이 떴다. 썸네일을 찍는 조건은 문서에 없어서, 원인은 추정으로 남겼다.
+    </p>
+    <p>
+      같은 날 빌드 로그 경고 세 가지도 정리했다 — 모델 변환 도구에만 들어 있던 옛 <code>glob</code>은 최신으로 고정, npm의 설치 스크립트 승인 목록에
+      esbuild 추가, 500kB가 넘는 파일은 three.js를 따로 떼어(배포가 바뀌어도 브라우저가 재사용) 해결했다. 셋 다 게임 동작과는 무관했다.
+    </p>
   </section>
 
   <section class="track" id="closing">
@@ -647,7 +667,8 @@
       내 얼굴이 들어가는 기능은 개인정보 약속을 먼저 정하고, 나중에 붙인 기능(오프라인 워커, 기념사진)까지 같은 약속을 지키는지 테스트로 묶었다.
     </p>
     <p>
-      남은 일: 실사 물고기 11종(무료 3D 생성의 하루 사용량만큼씩), 실제 그래픽카드에서의 성능 확인(자동 검사는 소프트웨어 그래픽이라 성능 측정이 아니다).
+      남은 일: 사진→3D로 바꿀 물고기 14종(무료 3D 생성의 하루 사용량만큼씩, 사용자와 정한 순서대로 — 자주 보이는데 어색한 것부터),
+      실제 그래픽카드에서의 성능 확인(자동 검사는 소프트웨어 그래픽이라 성능 측정이 아니다).
     </p>
   </section>
 
