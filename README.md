@@ -10,7 +10,8 @@
 ├── iaic-2026/          2026 인하 인공지능 챌린지 — 로봇팔 월드모델
 ├── jarvischan/         Jarvischan — 영화 스타일 음성 비서
 ├── shadow-mitts/       Shadow Mitts — 웹캠 복싱 미트 게임
-└── sonmat-real-casting/ 손맛: 리얼 캐스팅 — 웹캠 낚시 게임
+├── sonmat-real-casting/ 손맛: 리얼 캐스팅 — 웹캠 낚시 게임
+└── webcam-teach-robot/  웹캠으로 로봇팔 가르치기 — 피지컬 AI (진행 중)
 ```
 
 프로젝트 폴더마다 두 쪽이 있어요.
