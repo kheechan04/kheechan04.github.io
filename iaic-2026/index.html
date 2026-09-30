@@ -114,17 +114,17 @@
   <header>
     <div class="eyebrow">portfolio · world models &amp; robotics</div>
     <h1>김희찬</h1>
-    <p class="role">로봇팔 영상 예측(월드 모델) 프로젝트를 두 번 진행하면서, 자원이 빠듯할수록
-      원인을 끝까지 파고드는 쪽에 집중했습니다.</p>
+    <p class="role">2026 인하 AI 챌린지에 4인 팀으로 참가해 로봇팔 영상 예측(월드 모델) 학습을 맡았습니다.
+      GPU 자원이 빠듯한 상황에서, 원인을 실측으로 끝까지 파고드는 데 집중했습니다.</p>
     <div class="meta-row">
       <span>이메일 <a class="link-line" href="mailto:khchan04@naver.com">khchan04@naver.com</a></span>
       <span>GitHub <a class="link-line" href="https://github.com/kheechan04" target="_blank" rel="noopener">github.com/kheechan04</a></span>
-      <span>전체 시행착오 기록 <a class="link-line" href="full.html" >개인 기록용 포트폴리오 →</a></span>
+      <span>전체 시행착오 기록 <a class="link-line" href="full.html">개인 기록용 포트폴리오 →</a></span>
     </div>
     <div class="badge-row">
-      <div class="badge"><div class="v">6 / 41</div><div class="l">2026 인하 AI 챌린지 최종 순위</div></div>
-      <div class="badge"><div class="v">2</div><div class="l">개인 진행 프로젝트</div></div>
-      <div class="badge"><div class="v">24 / 48 / 96GB</div><div class="l">프로젝트별 GPU 환경</div></div>
+      <div class="badge"><div class="v">6 / 41</div><div class="l">팀 최종 순위</div></div>
+      <div class="badge"><div class="v">0.4578 → 0.2446</div><div class="l">Ctrl-World 리더보드 점수 (낮을수록 좋음)</div></div>
+      <div class="badge"><div class="v">24 / 48 / 96GB</div><div class="l">학습에 쓴 GPU 환경</div></div>
     </div>
   </header>
 
@@ -133,31 +133,24 @@
     <article class="card">
       <div class="card-top">
         <h2>Ctrl-World 로봇팔 월드모델 파인튜닝</h2>
-        <span class="period mono">2026.07 – 08 · 개인 프로젝트</span>
+        <span class="period mono">2026.07 – 08 · 팀 참가 · 담당 파트</span>
       </div>
       <p class="pitch">
-        대회 기준 GPU(RTX PRO 6000 96GB)보다 훨씬 작은 24GB, 이어서 48GB GPU로 로봇팔 영상 예측 모델(Ctrl-World)을
-        세 차례 다시 학습시키며, 실제 리더보드 점수를 0.4578에서 0.2446까지 끌어올렸습니다. 서버가
-        제약될수록 병목을 코드 레벨에서 정확히 찾아내는 게 관건이었습니다.
+        로봇팔 영상 예측 모델 Ctrl-World를 맡아, 대회 기준 GPU(96GB)보다 훨씬 작은 24GB, 이어서 48GB GPU에서
+        세 차례 다시 학습시켰습니다. 리더보드 점수를 0.4578에서 0.2446으로 개선했습니다.
       </p>
-      <div class="stat-strip">
-        <div class="stat-pill"><div class="v up">0.4578 → 0.2446</div><div class="l">실제 리더보드 점수(낮을수록 좋음)</div></div>
-        <div class="stat-pill"><div class="v">3</div><div class="l">라운드 (24GB → 48GB 서버 전환 포함)</div></div>
-        <div class="stat-pill"><div class="v">2배</div><div class="l">코드에서 규명한 CFG 추론비용 구조</div></div>
-      </div>
       <ul class="highlights">
-        <li>학습 전처리와 채점 파이프라인의 리사이즈 방식(비율 무시 stretch vs 레터박스)이 어긋나
-          있던 걸 발견 — 1라운드 결과가 정지 화면보다도 나빴던 이유로 가장 유력했던 차이.</li>
+        <li>1라운드가 정지 화면보다도 나빴던 원인을 찾다가, 학습 전처리(비율 무시 stretch)와
+          채점 파이프라인(레터박스)의 리사이즈 방식이 어긋나 있던 걸 발견.</li>
         <li><code class="mono">guidance_scale &gt; 1.0</code>이면 매 스텝 UNet을 2배 호출한다는 걸
-          코드에서 직접 찾아내 1시간 추론 예산 문제를 해결.</li>
-        <li>자체 채점 실험 결과가 규정상 쓸 수 없는 것이었음을 제출 전에 스스로 발견·폐기하고,
-          동일 실수가 코드 수준에서 재발하지 않도록 lock 가드를 구현.</li>
+          코드에서 직접 찾아 1시간 추론 예산 문제를 해결.</li>
+        <li>자체 채점 실험 결과가 규정상 쓸 수 없는 것임을 제출 전에 스스로 발견해 폐기하고,
+          재발하지 않도록 lock 가드를 구현.</li>
       </ul>
       <div class="tags">
         <span class="tag">PyTorch</span><span class="tag">Diffusers</span>
         <span class="tag">Stable Video Diffusion</span><span class="tag">bitsandbytes</span>
         <span class="tag">RunPod</span><span class="tag">HuggingFace Hub</span>
-        <span class="tag">bash / tmux 운영자동화</span>
       </div>
       <div class="card-foot">
         <a class="readmore" href="full.html">라운드별 상세 기록 보기</a>
@@ -167,31 +160,24 @@
 
     <article class="card">
       <div class="card-top">
-        <h2>Latent Optical-Flow 기반 프레임 예측 실험</h2>
-        <span class="period mono">2026.08 · 개인 프로젝트</span>
+        <h2>Latent Optical-Flow 구조 학습·검증</h2>
+        <span class="period mono">2026.08 · 팀 참가 · 담당 파트</span>
       </div>
       <p class="pitch">
-        로봇팔 영상 생성 모델의 "예측이 흐려지는" 문제를, 내부 지표가 아니라 실제 프레임의 픽셀
-        변화량을 직접 측정해 원인을 좁혔습니다. latent 공간에서 delta 대신 optical flow + residual을
-        예측하도록 아키텍처를 바꿔 검증했습니다.
+        delta 방식으로 학습하던 모델을, 팀원(승원)이 제안한 optical flow + residual 구조로 바꿔 학습·검증했습니다.
+        내부 지표는 좋아졌는데 실제 점수는 나빠진 이유를, 예측 프레임의 픽셀 변화량을 직접 재서 좁혔습니다.
       </p>
-      <div class="stat-strip">
-        <div class="stat-pill"><div class="v">12~19%↓</div><div class="l">내부 proxy 지표 개선폭</div></div>
-        <div class="stat-pill"><div class="v up" style="color:var(--text)">정반대</div><div class="l">실제 리더보드 순위는 역전</div></div>
-        <div class="stat-pill"><div class="v">12.9 vs 4.1</div><div class="l">frame 0↔15 평균 픽셀 변화량 (정답 vs flow 예측)</div></div>
-      </div>
       <ul class="highlights">
-        <li>"픽셀이 같은 자리에서 값만 바뀐다"는 delta 방식의 가정이 팔이 실제로 이동하는 태스크와
-          안 맞는다는 팀원(승원)의 진단을 받아, warp+residual 구조로 바꿔 학습·검증.</li>
-        <li>내부 검증 지표가 가장 좋던 체크포인트가 실제 점수는 가장 나쁘고, 가장 나쁘던 쪽이 실제로는
-          가장 좋았던 역전을 4개 체크포인트로 확인 — "더 학습한다고 실제 성능이 보장되지 않는다"는 근거.</li>
-        <li>optimizer를 재개할 때 학습률이 조용히 이전 값으로 되돌아가는 버그, 검증셋이 매번
-          무작위로 바뀌어 체크포인트 비교가 무의미했던 문제를 코드에서 직접 찾아 수정.</li>
+        <li>내부 검증 지표가 가장 좋던 체크포인트가 실제 점수는 가장 나쁜 역전을 4개 체크포인트로 확인
+          — "더 학습한다고 실제 성능이 보장되지 않는다"는 근거.</li>
+        <li>frame 0↔15 평균 픽셀 변화량이 정답 12.9, flow 예측 4.1 — 움직여야 할 팔·그리퍼만 흐려지는
+          "평균 예측" 문제로 진단.</li>
+        <li>optimizer 재개 시 학습률이 조용히 이전 값으로 돌아가는 버그와, 매번 바뀌던 검증셋 문제를
+          코드에서 찾아 수정.</li>
       </ul>
       <div class="tags">
         <span class="tag">PyTorch</span><span class="tag">SDXL-VAE</span>
-        <span class="tag">Optical Flow</span><span class="tag">grid_sample 워핑</span>
-        <span class="tag">RTX PRO 6000 96GB</span><span class="tag">TensorBoard</span>
+        <span class="tag">Optical Flow</span><span class="tag">TensorBoard</span>
       </div>
       <div class="card-foot">
         <a class="readmore" href="full.html#track-flow">근본원인 분석 전체 보기</a>
@@ -201,18 +187,9 @@
 
   </section>
 
-  <div class="stack-cloud">
-    <h3>공통으로 다룬 것</h3>
-    <div class="tags">
-      <span class="tag">Video Diffusion</span><span class="tag">Latent Space</span>
-      <span class="tag">Action-Conditioned Generation</span><span class="tag">GPU 메모리 최적화</span>
-      <span class="tag">규정/컴플라이언스 자체 점검</span><span class="tag">실측 기반 의사결정</span>
-    </div>
-  </div>
-
   <footer>
-    <p>두 프로젝트 모두 2026 인하 인공지능 챌린지(로봇 미래 행동 영상 생성) 참가 중 진행한 개인 실험입니다.
-      과정 전체(시행착오, 인프라 사고, 코드 발췌 포함)를 담은 상세 기록은 아래에서 볼 수 있습니다.</p>
+    <p>두 작업 모두 2026 인하 인공지능 챌린지(로봇 미래 행동 영상 생성)에 4인 팀으로 참가해 제가 맡은 부분입니다.
+      순위는 팀 전체의 결과이며, 팀 구성과 트랙별 진행 상황은 상세 기록에 정리했습니다.</p>
     <a class="full-link link-line" href="full.html" >→ 2026 인하 인공지능 챌린지 포트폴리오(개인 기록용) 전체 보기</a>
   </footer>
 

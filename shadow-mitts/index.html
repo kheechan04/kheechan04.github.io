@@ -109,9 +109,8 @@
   <header>
     <div class="eyebrow">portfolio · browser computer vision &amp; game</div>
     <h1>김희찬</h1>
-    <p class="role">웹캠 하나로 복싱 미트를 치는 브라우저 게임 Shadow Mitts를 기획하고, 직접 몸으로
-      플레이 테스트하며 나온 문제를 녹화·게임 기록 데이터로 원인을 찾아 고친 기록입니다. 키보드도
-      센서도 없이 포즈 인식만으로 어느 손으로·어떤 펀치를·언제 쳤는지 판정합니다.</p>
+    <p class="role">웹캠 하나로 복싱 미트를 치는 브라우저 게임입니다. 포즈 인식만으로 어느 손으로·어떤 펀치를·언제 쳤는지
+      판정하고, 직접 플레이하며 나온 문제를 녹화·게임 기록 데이터로 원인을 찾아 고쳤습니다.</p>
     <div class="meta-row">
       <span>이메일 <a class="link-line" href="mailto:khchan04@naver.com">khchan04@naver.com</a></span>
       <span>GitHub <a class="link-line" href="https://github.com/kheechan04" target="_blank" rel="noopener">github.com/kheechan04</a></span>
@@ -119,8 +118,7 @@
     </div>
     <div class="badge-row">
       <div class="badge"><div class="v">94%</div><div class="l">녹화 175펀치 중 친 손·시점 인식</div></div>
-      <div class="badge"><div class="v">27 → 60fps</div><div class="l">게임 화면 (추론을 Web Worker로 분리)</div></div>
-      <div class="badge"><div class="v">100 → 154</div><div class="l">15fps로 솎은 녹화의 인식 수 (/175)</div></div>
+      <div class="badge"><div class="v">27 → 60fps</div><div class="l">게임 화면 (포즈 추론을 Web Worker로 분리)</div></div>
       <div class="badge"><div class="v">0건</div><div class="l">영상·얼굴을 밖으로 보내는 요청</div></div>
     </div>
   </header>
@@ -134,37 +132,22 @@
       </div>
       <p class="pitch">
         트레이너가 대 주는 미트에 "1-2-3" 같은 실제 복싱 번호 콤보를 쳐서 맞히는 1인칭 3D 게임입니다.
-        MediaPipe 포즈 인식을 브라우저 안에서 돌려 영상이 어디로도 나가지 않고, Vercel에 배포해
-        링크만으로 실행되며 설치형 웹앱(PWA)으로도 쓸 수 있습니다. 설계는 Claude와, 구현·배포는
-        Claude Code와 함께 했고, 저는 기획·플레이 테스트·녹화 데이터 수집·원인 판단과 우선순위 결정을
-        맡았습니다.
+        설계는 Claude와, 구현·배포는 Claude Code와 함께 했고, 저는 기획·플레이 테스트·녹화 데이터 수집·원인 판단과
+        우선순위 결정을 맡았습니다.
       </p>
-      <div class="stat-strip">
-        <div class="stat-pill"><div class="v up">19 → 27 /31</div><div class="l">게임 중 펀치 종류 정답 (게임 기록으로 규칙 보정)</div></div>
-        <div class="stat-pill"><div class="v">34 / 34</div><div class="l">예전 설정으로 재생한 판정이 실제 게임과 일치</div></div>
-        <div class="stat-pill"><div class="v">15 → 20회/초</div><div class="l">GPU 대신 CPU 추론으로 바꾼 뒤 인식 횟수</div></div>
-        <div class="stat-pill"><div class="v up">18% → 35%</div><div class="l">약한 펀치 출제 비율 (적응형 출제)</div></div>
-      </div>
       <ul class="highlights">
-        <li>"연습 녹화에선 잡히는데 게임에선 못 잡는다"는 문제를 녹화 프레임 간격(16.7→33→67ms)으로
-          추적 — 어두운 방에서 웹캠이 15fps로 떨어진 게 원인. 60fps 녹화를 15fps로 솎아 재생하는
-          실험으로 재현하고, fps에 따라 속도 기준을 자동 조정해 100 → 154/175로 회복.</li>
-        <li>게임 기록 저장 기능을 직접 넣어 실제 판정을 재생 — 예전 설정값으로 돌리면 34/34 일치하는
-          것을 보고, 기본값을 고쳐도 브라우저에 저장된 옛 설정이 계속 쓰이던 버그를 찾아냄.</li>
-        <li>화면 끊김을 프레임 간격 로그로 측정 — 포즈 추론이 메인 스레드의 약 80%를 차지.
-          Web Worker로 분리해 27 → 60fps, 같은 이미지에서 좌표가 동일함을 검증. 게임 중엔 GPU가
-          3D 화면과 경쟁해 오히려 느려서 CPU 추론을 기본으로.</li>
-        <li>"친 미트가 잔상처럼 다시 뜬다"는 피드백을, 가상 시간으로 프레임마다 미트 위치를 기록하는
-          검사로 추적 — 지운 3D 모델을 렌더 루프가 되살리던 버그를 발견.</li>
-        <li>내 얼굴이 판정에 반응하는 리액션 기능을 생성형 AI 서버 대신 브라우저 안 얼굴 좌표 변형으로
-          구현 — 개인정보보호법·생체정보 안내서·모델 카드를 검토하고, 네트워크 기록으로
+        <li>"연습 녹화에선 잡히는데 게임에선 못 잡는다" — 프레임 간격을 추적해 어두운 방에서 웹캠이 15fps로
+          떨어진 게 원인임을 찾고, fps에 맞춰 속도 기준을 자동 조정해 인식 100 → 154/175로 회복.</li>
+        <li>게임 기록을 재생해 예전 설정과 34/34 일치하는 걸 보고, 기본값을 고쳐도 브라우저에 저장된
+          옛 설정이 계속 쓰이던 버그를 찾아냄.</li>
+        <li>화면 끊김을 프레임 로그로 재 보니 포즈 추론이 메인 스레드의 약 80% — Web Worker로 분리해 27 → 60fps.</li>
+        <li>얼굴 리액션 기능은 생성형 AI 서버 대신 브라우저 안에서 구현하고, 네트워크 기록으로
           "사진이 기기 밖으로 안 나간다"는 안내 문구가 사실인지 검증.</li>
       </ul>
       <div class="tags">
         <span class="tag">TypeScript</span><span class="tag">MediaPipe Pose/Face</span>
         <span class="tag">Web Worker</span><span class="tag">three.js</span>
-        <span class="tag">Web Audio API</span><span class="tag">Vitest</span>
-        <span class="tag">Vercel</span><span class="tag">PWA · Service Worker</span>
+        <span class="tag">Vitest</span><span class="tag">Vercel</span>
       </div>
       <div class="card-foot">
         <a class="readmore" href="full.html">상세 시행착오 기록 보기</a>
