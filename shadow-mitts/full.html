@@ -226,7 +226,7 @@
 
     <div class="stat-row">
       <div class="stat"><div class="v">94%</div><div class="l">녹화 19개·175펀치 중 친 손·시점 인식 (번호까지 91%)</div></div>
-      <div class="stat"><div class="v">100→154</div><div class="l">15fps로 솎은 녹화에서 인식한 펀치 (/175)</div></div>
+      <div class="stat"><div class="v">100→154</div><div class="l">15fps로 줄여 재생한 녹화에서 인식한 펀치 (/175)</div></div>
       <div class="stat"><div class="v">27→60</div><div class="l">게임 화면 fps (포즈 추론을 Web Worker로)</div></div>
       <div class="stat"><div class="v">34/34</div><div class="l">예전 설정으로 재생한 판정이 실제 게임과 일치한 수</div></div>
       <div class="stat"><div class="v">0건</div><div class="l">영상·얼굴을 밖으로 보내는 네트워크 요청</div></div>
@@ -437,10 +437,10 @@
     <h3 class="sub"><span class="idx">3.0</span>원인 1 — 웹캠이 15fps로 떨어져 있었다</h3>
     <p>
       녹화 파일의 프레임 간격을 늘어놓아 보니 16.7ms(60fps) → 33ms(30fps) → 67ms(15fps)로 점점 벌어져 있었다.
-      컴퓨터가 느려서가 아니라 <b>어두운 방에서 웹캠이 스스로 초당 장수를 줄인 것</b>이다. 60fps 녹화를 15fps로
-      솎아 재생하자 게임에서처럼 펀치의 약 40%를 놓쳤다 — 재현 성공. 프레임이 드물면 최고 속도가 낮게 재지므로,
+      컴퓨터가 느려서가 아니라 <b>어두운 방에서 웹캠이 스스로 초당 장수를 줄인 것</b>이다. 이 상황을 녹화로 흉내 내려고, 60fps 녹화에서
+      네 장에 한 장만 써서 15fps 웹캠처럼 줄여 재생했다. 그러자 게임에서처럼 펀치의 약 40%를 놓쳤다 — 재현 성공. 프레임이 드물면 최고 속도가 낮게 재지므로,
       최근 프레임 간격에 따라 속도 기준을 30fps~15fps 사이에서 자동으로 낮추고(15fps에서 0.75배), 뻗는 시간 허용치도
-      늘렸다. 솎은 녹화 100 → 154/175, 오검출은 여전히 0.
+      늘렸다. 15fps로 줄인 녹화 100 → 154/175, 오검출은 여전히 0.
     </p>
 
     <h3 class="sub"><span class="idx">3.1</span>원인 2 — 고친 설정이 게임에 적용된 적이 없었다</h3>
