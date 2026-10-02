@@ -89,6 +89,9 @@
   .shot{ margin:0 0 22px; }
   .shot img{ display:block; width:100%; height:auto; border-radius:10px; border:1px solid var(--border); background:#fcfcfb; }
   .shot figcaption{ font-size:.78rem; color:var(--text-faint); margin-top:6px; }
+  .duo{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:0 0 22px; }
+  .duo .shot{ margin:0; }
+  @media (max-width:600px){ .duo{ grid-template-columns:1fr; } }
 
   .card-foot{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; border-top:1px solid var(--border); padding-top:18px; }
   .readmore{ font-weight:600; display:inline-flex; align-items:center; gap:6px; }
@@ -115,17 +118,18 @@
     <div class="eyebrow">portfolio · physical ai · 진행 중</div>
     <h1>김희찬</h1>
     <p class="role">웹캠으로 보여 준 시범만으로 시뮬레이션 로봇팔(SO-101)을 가르치고, 웹캠의 깊이 오차가
-      모방 학습 결과를 얼마나 깎아 먹는지 재는 개인 프로젝트입니다. 지금은 1단계(웹캠 원격 조종)를 마쳤습니다.</p>
+      모방 학습 결과를 얼마나 깎아 먹는지 재는 개인 프로젝트입니다. 웹캠 조종으로 큐브를 옮기는 데 성공했고,
+      프로그램 시범으로 학습시킨 로봇이 처음 보는 배치에서 혼자 과제를 해내는 것까지 확인했습니다.</p>
     <div class="meta-row">
       <span>저장소 <a class="link-line" href="https://github.com/kheechan04/webcam-teach-robot" target="_blank" rel="noopener">github.com/kheechan04/webcam-teach-robot</a> (공개)</span>
       <span>전체 시행착오 기록 <a class="link-line" href="full.html">개인 기록용 포트폴리오 →</a></span>
-      <span>마지막 갱신 <b class="mono">2026-10-01</b></span>
+      <span>마지막 갱신 <b class="mono">2026-10-02</b></span>
     </div>
     <div class="badge-row">
+      <div class="badge"><div class="v">88 / 100</div><div class="l">학습한 로봇이 처음 보는 배치에서 성공 (조건 ①, 시험 학습)</div></div>
       <div class="badge"><div class="v">+12.7 cm</div><div class="l">손바닥을 기울였을 때 평균 깊이 오차 (펴면 −2.7 cm, 예비 측정)</div></div>
-      <div class="badge"><div class="v">0.14 mm</div><div class="l">직접 구현한 역기구학 위치 오차 중앙값 (도달 가능한 목표)</div></div>
-      <div class="badge"><div class="v">≈30 fps</div><div class="l">웹캠 → 로봇 조종 루프 (중앙값 30 ms)</div></div>
-      <div class="badge"><div class="v">1 / 4</div><div class="l">단계 진행 (조종 → 데이터 → 학습 → 실물)</div></div>
+      <div class="badge"><div class="v">14 vs 5 cm</div><div class="l">손가락을 여닫는 순간 vs 평소의 깊이 출렁임 (1.2초 동안)</div></div>
+      <div class="badge"><div class="v">5 / 11</div><div class="l">마일스톤 진행 (조사 → 조종 → 과제 → 데이터 → 시험 학습 …)</div></div>
     </div>
   </header>
 
@@ -172,7 +176,10 @@
       <ul class="highlights">
         <li>원인: MediaPipe의 3D 손 모델이 기울어진 손바닥을 6.5~7.0 cm로 봄(실제 10.0 cm) — 이전 웹캠 게임에서 본 "깊이가 눌린다" 현상이
           손 모델 안에서도 일어나는 것을 숫자로 확인.</li>
-        <li>손바닥 너비로 추정하면 기울였을 때 오차가 +12.7 → +4.9 cm로 줄어듦. 조건 ③ 깊이 보정의 첫 후보.</li>
+        <li>손바닥 너비로 추정하면 기울였을 때 오차가 +12.7 → +4.9 cm로 줄어듦.</li>
+        <li>진행 과정을 비공개 SNS 계정으로 동기·친구들에게 공유해 받은 질문 두 개를 계기로 분석을 추가 — 3D 길이 전체 대신 화면과 나란한 성분만 쓰면
+          기울였을 때 오차 +12.7 → +6.0 cm, 손가락을 여닫는 순간 깊이 튐은 검지 쪽 손바닥 구간이 가장 크고 새끼손가락 쪽이 가장 작음.
+          조건 ③ 깊이 보정 후보가 됨(예비).</li>
       </ul>
       <div class="tags">
         <span class="tag">MediaPipe Hand Landmarker</span><span class="tag">핀홀 카메라 모델</span><span class="tag">matplotlib</span>
@@ -208,11 +215,48 @@
       </div>
     </article>
 
+    <article class="card">
+      <div class="card-top">
+        <h2>큐브 옮기기 — 웹캠 첫 성공과 시험 학습</h2>
+        <span class="period mono">2026.10 · 과제 · 데이터 · 학습</span>
+      </div>
+      <p class="pitch">
+        3 cm 큐브를 집어 초록 목표 위에 내려놓는 과제를 만들었습니다. 웹캠 조종으로 처음 성공하기까지 기록에서 문제를 두 개 찾아 고쳤고,
+        프로그램 시범 50개로 학습시킨 로봇(ACT)이 시범에 쓰지 않은 배치 100개 중 88개에서 혼자 과제를 해냈습니다.
+      </p>
+      <div class="duo">
+        <figure class="shot">
+          <img src="img/webcam-success.webp" alt="시뮬레이션 로봇팔이 빨간 큐브를 들어 초록 목표 위에 내려놓는 재생 장면" width="384" height="256" loading="lazy">
+          <figcaption>웹캠으로 조종한 첫 성공(74초 중 마지막 9초). 웹캠 영상 없이 기록된 관절 각도·큐브 위치로 다시 그림.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="img/policy-cond1.webp" alt="학습한 로봇이 혼자 큐브를 집어 목표에 놓는 장면과, 로봇이 보는 앞쪽·손목 카메라 화면" width="512" height="256" loading="lazy">
+          <figcaption>학습한 로봇 혼자(처음 보는 배치). 오른쪽은 로봇이 실제로 보는 카메라 화면 2개(128×128).</figcaption>
+        </figure>
+      </div>
+      <ul class="highlights">
+        <li>데이터셋을 만들다가 성공 판정이 "바닥에서 밀어 넣기"도 성공으로 치고 있었다는 걸 발견 — "성공"이 찍힌 기록 4개가 모두 그랬다.
+          "들어서 옮겨 놓기"만 인정하도록 고치자 그날 기록 8개가 전부 실패로, 직접 조종한 사람의 판단과 일치.</li>
+        <li>놓으려는 순간 불안정한 원인: 손가락을 여닫는 순간 깊이 추정이 출렁여(1.2초 동안 약 14 cm, 평소 5.1 cm) 로봇이 앞뒤로
+          2~2.6 cm 흔들림. 집기 허용 오차(앞뒤 약 0.5~1 cm)보다 커서, 여닫는 동안 팔을 고정하는 "집기 잠금"을 넣은 뒤 첫 성공.</li>
+        <li>시험 학습: RunPod RTX 3090에서 16분(약 $0.07). 평가 100개 중 88개 성공(95% 구간 80~93%). 실패 12개 중 3개는 목표 안에 놓았지만
+          놓는 순간 1 cm 넘게 밀린 경우 — 결과를 본 뒤 판정을 느슨하게 하지 않고 그대로 고정.</li>
+      </ul>
+      <div class="tags">
+        <span class="tag">LeRobot 0.6 · ACT</span><span class="tag">Hugging Face Hub</span><span class="tag">RunPod</span>
+        <span class="tag">평가 배치 고정</span>
+      </div>
+      <div class="card-foot">
+        <a class="readmore" href="full.html#track-cube">과제·판정·학습 기록 보기</a>
+      </div>
+    </article>
+
   </section>
 
   <footer>
-    <p>진행 중인 프로젝트라 단계가 끝날 때마다 이 페이지를 갱신합니다. 다음은 2단계 — 집어 옮길 물체가 있는 과제 환경을 만들고
-      조건별 시범 데이터를 모으는 것입니다. 모든 수치는 직접 잰 값이고, 예비 측정은 예비 측정이라고 적었습니다.</p>
+    <p>진행 중인 프로젝트라 마일스톤이 끝날 때마다 이 페이지를 갱신합니다. 다음은 참값과 비교하는 정식 깊이 측정과 관련 연구 재조사,
+      그다음 깊이 보정을 만들고 웹캠 시범(보정 전·후)을 번갈아 모아 네 조건을 비교하는 것입니다.
+      모든 수치는 직접 잰 값이고, 예비 측정은 예비 측정이라고 적었습니다.</p>
     <a class="full-link link-line" href="full.html">→ 웹캠으로 로봇팔 가르치기 포트폴리오(개인 기록용) 전체 보기</a>
   </footer>
 
