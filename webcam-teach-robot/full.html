@@ -107,7 +107,7 @@
   @media (max-width:720px){ .glance-grid{ grid-template-columns:1fr; } }
 
   .timeline-outer{ overflow-x:auto; margin-block:28px; padding-bottom:10px; }
-  .timeline{ display:flex; min-width:1500px; position:relative; padding-top:14px; }
+  .timeline{ display:flex; min-width:2300px; position:relative; padding-top:14px; }
   .timeline::before{ content:""; position:absolute; top:24px; left:0; right:0; height:2px; background:var(--border-strong); }
   .tl-item{ flex:1; position:relative; padding-inline:8px; }
   .tl-dot{ width:11px; height:11px; border-radius:50%; background:var(--surface); border:2px solid var(--accent); margin-inline:auto; position:relative; z-index:1; }
@@ -180,8 +180,12 @@
         <a href="#track-grasp"><span class="n">06</span> 웹캠으로 첫 성공 — 집기 잠금</a>
         <a href="#track-pilot"><span class="n">07</span> 데이터셋과 시험 학습 — 88/100</a>
         <a href="#track-feedback"><span class="n">08</span> 피드백으로 바뀐 것</a>
-        <a href="#track-next"><span class="n">09</span> 다음 단계</a>
-        <a href="#sources"><span class="n">10</span> 자료 출처 · 라이선스</a>
+        <a href="#track-depth-formal"><span class="n">09</span> 정식 깊이 측정</a>
+        <a href="#track-related"><span class="n">10</span> 관련 연구 다시 찾기</a>
+        <a href="#track-correction"><span class="n">11</span> 깊이 보정 (조건 ③)</a>
+        <a href="#track-recording"><span class="n">12</span> 웹캠 시범 100개 녹화</a>
+        <a href="#track-next"><span class="n">13</span> 다음 단계</a>
+        <a href="#sources"><span class="n">14</span> 자료 출처 · 라이선스</a>
       </div>
     </details>
   </div>
@@ -195,20 +199,21 @@
     <p class="lede">
       보통 SO-100/101 로봇팔은 조종용 팔을 하나 더 두고 시범을 보여 가르친다. 이 프로젝트는 <b>웹캠 하나로</b> 시범을 모으고,
       그 시범으로 모방 학습을 했을 때 <b>웹캠의 깊이 오차가 성공률을 얼마나 깎아 먹는지</b>를 재는 것이 목표다.
-      지금은 웹캠 조종으로 큐브 옮기기에 성공했고, 프로그램 시범으로 학습시킨 로봇이 처음 보는 배치 100개 중 88개를 혼자 해내는 것까지
-      확인했다(마일스톤 11개 중 5개). 코드는 Claude Code와 함께 작성했고,
+      프로그램 시범으로 학습시킨 로봇이 처음 보는 배치 100개 중 88개를 혼자 해내는 기준점을 잡았고, 참값과 비교한 깊이 측정으로
+      깊이 보정(조건 ③)을 만든 뒤, 웹캠 시범을 보정 전·후 50개씩 직접 녹화했다(마일스톤 11개 중 8개, 조건 ④ 남음). 코드는 Claude Code와 함께 작성했고,
       이 문서에는 무엇을 재고 무엇이 틀렸고 어떻게 고쳤는지를 남겼다.
     </p>
 
     <div class="stat-row">
       <div class="stat"><div class="v">+12.7 cm</div><div class="l">손바닥을 기울였을 때 평균 깊이 오차 (펴면 −2.7 cm)</div></div>
-      <div class="stat"><div class="v">10.0 → 6.5~7.0</div><div class="l">기울였을 때 MediaPipe가 본 손바닥 길이 (cm, 실측 10.0)</div></div>
+      <div class="stat"><div class="v">+10~12 cm</div><div class="l">큐브를 집는 손(집고 기울임)의 깊이 오차, 정식 측정 70단계</div></div>
+      <div class="stat"><div class="v">100 / 104</div><div class="l">직접 녹화한 웹캠 시범 (본 녹화 시도 104번, 66분)</div></div>
       <div class="stat"><div class="v">14 vs 5 cm</div><div class="l">손가락을 여닫는 순간 vs 평소 깊이 출렁임 (1.2초)</div></div>
       <div class="stat"><div class="v">88 / 100</div><div class="l">조건 ①로 학습한 로봇, 처음 보는 배치 성공 (95% 80~93%)</div></div>
     </div>
 
     <div class="legend">
-      <span class="chip chip-personal">● 직접: 방향 결정(차별점·로봇·실험 조건·설계 선택) · 깊이 측정 · 조종 시험과 불편 찾기 · 학습 서버 운영 · 피드백 받기</span>
+      <span class="chip chip-personal">● 직접: 방향 결정(차별점·로봇·실험 조건·설계 선택) · 깊이 측정(예비 10단계·정식 70단계) · 조종 시험과 불편 찾기 · 웹캠 시범 100개 녹화 · 학습 서버 운영 · 피드백 받기</span>
       <span class="chip chip-convo">▨ Claude Code와 협업 — 조사 · 구현 · 기록 분석 → 원인 확인 → 수정 → 다시 조종</span>
     </div>
   </header>
@@ -269,11 +274,31 @@
         <b>동기의 질문 두 개 → 보정 후보 두 개</b>
         <span class="d">화면과 나란한 성분만 쓰면 기울임 오차 +12.7 → +6.0 cm, 손을 여닫을 때는 새끼손가락 쪽 구간이 덜 튐 → <a href="#track-feedback">8장</a></span>
       </div>
+      <div class="glance-item">
+        <span class="chip chip-fix glance-tag">정식 측정</span>
+        <b>큐브를 집는 손이 10~12 cm 멀다</b>
+        <span class="d">참값과 비교한 70단계. 피드백 후보 두 개는 지금 방식을 못 이김 → 보정 방향을 바꿈 → <a href="#track-depth-formal">9장</a></span>
+      </div>
+      <div class="glance-item">
+        <span class="chip chip-new glance-tag">재조사</span>
+        <b>비전 학회 + 인용 487편</b>
+        <span class="d">RootNet(ICCV 2019)의 "핀홀 × 학습한 보정"을 손에 적용. 조종 성능 비교는 있었지만 학습 결과 비교는 못 찾음 → <a href="#track-related">10장</a></span>
+      </div>
+      <div class="glance-item">
+        <span class="chip chip-new glance-tag">조건 ③</span>
+        <b>손 모양 바꿀 때 튐 9.9 → 5.6 cm</b>
+        <span class="d">1회차로 맞추고 2회차로 평가. 다 없애진 못하고 조금 너무 고침 → <a href="#track-correction">11장</a></span>
+      </div>
+      <div class="glance-item">
+        <span class="chip chip-personal glance-tag">직접 녹화</span>
+        <b>웹캠 시범 100개, 규칙 세 번 수정</b>
+        <span class="d">집게 깜빡 열림 · 손 바꾸기 · 손바닥 돌아감을 기록으로 찾아 고치고 처음부터. 녹화 중 ②·③ 차이 없음(p = 0.42) → <a href="#track-recording">12장</a></span>
+      </div>
     </div>
   </section>
 
   <section>
-    <h3 class="sub"><span class="idx">TL</span>타임라인 (2026-10-01 ~ 10-02, 커밋 기준)</h3>
+    <h3 class="sub"><span class="idx">TL</span>타임라인 (2026-10-01 ~ 10-03, 커밋 기준)</h3>
     <div class="timeline-outer">
       <div class="timeline">
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">00:57</div><div class="tl-label">조사·방향 결정<br>SO-101 띄우기</div></div>
@@ -292,6 +317,12 @@
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">14:21</div><div class="tl-label">웹캠<br>첫 진짜 성공</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">14:44</div><div class="tl-label">고정 배치<br>조건 ① 데이터셋</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">18:31</div><div class="tl-label">시험 학습<br>88/100</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">23:47</div><div class="tl-label">정식 깊이 측정<br>품질 장치 2개</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">10-03 00:14</div><div class="tl-label">측정 분석<br>집는 손 +10~12</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">00:48</div><div class="tl-label">재조사<br>인용 487편</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">01:04</div><div class="tl-label">깊이 보정<br>조건 ③</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">01:29~02:17</div><div class="tl-label">녹화 규칙<br>세 번 수정</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">03:58</div><div class="tl-label">웹캠 시범<br>100/100</div></div>
       </div>
     </div>
     <p class="muted">구성: Python 3.12(uv), MuJoCo 3.14 + MuJoCo Menagerie SO-101 모델, MediaPipe Hand Landmarker 1.0.1(노트북 CPU),
@@ -317,6 +348,7 @@
       <tr><td class="key">Belkhale et al. (NeurIPS 2023)</td><td>같은 상황에서 시범 행동이 들쭉날쭉하면 학습 성능이 떨어진다는 데이터 품질 정식화</td><td>웹캠 오차가 "행동의 들쭉날쭉함"을 늘리는지 재 볼 수 있다</td></tr>
       <tr><td class="key">robomimic (CoRL 2021)</td><td>숙련도가 다른 조작자 6명의 시범으로 학습 비교</td><td>사람 숙련도는 다뤘지만 입력 장치 오차는 다루지 않았다</td></tr>
     </table></div>
+    <p class="muted">2026-10-03에 비전 학회와 인용 따라가기(487편)로 다시 찾은 결과는 <a href="#track-related">10장</a>. 차별점은 그대로였다.</p>
 
     <h3 class="sub"><span class="idx">1.1</span>연구 질문과 조건 네 개</h3>
     <p><b>"단안 웹캠 시범은 모방 학습 성공률을 얼마나 깎아 먹고, 그중 깊이 오차의 몫은 얼마이며, 보정하면 얼마나 회복되는가?"</b></p>
@@ -644,20 +676,194 @@
       <p>질문 두 개가 조건 ③ 깊이 보정 후보 두 개(화면과 나란한 성분, 새끼손가락 쪽 구간)가 됐다. 같은 동기가 비전 학회(CVPR·ICCV)와 ICLR도
         찾아보라고 조언해서, 보정을 만들기 전에 손 깊이 추정 연구를 비전 학회 중심으로, 원격 조종·모방 학습은 로봇 학회(CoRL·RSS·ICRA·IROS) 중심으로 다시 조사하기로 했다.</p>
     </div>
+    <p><b>그 뒤:</b> 정식 측정(9장)에서 공정하게 비교해 보니 두 후보 모두 이미 쓰던 방식을 뚜렷이 이기지 못했다. 대신 남는 오차가 "자세에 따른 일정한 치우침"이라는 걸 알게 됐고,
+      재조사(10장)에서 찾은 RootNet 구조로 보정을 만들었다(11장). 질문이 직접 보정이 되진 않았지만, 보정 방향을 정하는 측정과 재조사로 이어졌다.</p>
   </section>
 
   <!-- ================= 9 ================= -->
+  <section class="track" id="track-depth-formal">
+    <div class="track-head">
+      <span class="chip chip-personal">직접 측정 70단계</span>
+      <h2>정식 깊이 측정 — 큐브를 집는 손이 가장 크게 틀린다</h2>
+      <p class="desc">예비 측정(손 자세 2개)으로는 조건 ③ 보정과 ④ 가짜 오차의 근거가 부족했다. 거리·손 모양·손 높이를 바꿔 가며 참값과 비교했다.</p>
+      <div class="track-meta"><span>측정 <b>70단계 (실제 92번)</b></span><span>단계마다 <b>60프레임</b></span><span>코드 <b>measure_depth_v2.py</b></span></div>
+    </div>
+
+    <h3 class="sub"><span class="idx">9.0</span>방법</h3>
+    <ul>
+      <li>줄자 거리 35·45·55·65 cm × 손 4가지(편 손·집은 손 × 정면·45° 기울임) × 높이 2가지(웹캠 높이 24 cm·낮게 15 cm) × 2회, 회마다 순서를 섞음.
+        가로 위치(왼쪽 끝·가운데·오른쪽 끝) 3곳 × 2회를 더해 70단계.</li>
+      <li>참값은 "줄자 거리"가 아니라 <b>카메라 광축 방향 깊이</b>. 화면 기울기, 경첩~웹캠 길이, 본체 두께로 계산했다.</li>
+      <li>측정하면서 품질 장치 두 개를 추가했다.
+        <ol>
+          <li>"낮게"를 손목을 책상에 대고 쟀더니 가까운 거리에서 손 아래쪽이 화면 밖으로 잘렸다 → 책 위에 손목을 올려 15 cm로 바꾸고, 손 마디가 화면 가장자리에 닿으면 측정을 막고 처음부터 다시 쟀다.</li>
+          <li>"집은 손" 8단계가 실제로는 엄지·검지를 안 붙인 채 측정돼 있었다(엄지-검지 비율 0.82~1.04) → 무효로 하고 다시 쟀고, 비율이 0.6 아래일 때만 측정되게 막았다. 무효 단계의 기록은 지우지 않고 분석에서 뺀다.</li>
+        </ol></li>
+    </ul>
+
+    <h3 class="sub"><span class="idx">9.1</span>결과</h3>
+    <div class="tbl-outer"><table class="cfgtable">
+      <tr><th>손 (지금 조종 방식의 평균 오차, cm)</th><th class="num">웹캠 높이</th><th class="num">낮게</th></tr>
+      <tr><td class="key">편 손 · 정면</td><td class="num">+1.0</td><td class="num">+0.1</td></tr>
+      <tr><td class="key">편 손 · 기울임</td><td class="num">+4.4</td><td class="num">+2.1</td></tr>
+      <tr><td class="key">집은 손 · 정면</td><td class="num">+4.3</td><td class="num">+0.8</td></tr>
+      <tr><td class="key">집은 손 · 기울임</td><td class="num"><b>+10.2</b></td><td class="num"><b>+12.3</b></td></tr>
+    </table></div>
+    <figure class="shot" style="max-width:820px">
+      <img src="img/depth-formal.png" alt="손 모양과 높이 8가지 조건별 평균 깊이 오차 막대그래프. 집은 손을 기울였을 때 10 cm 넘게 멀게 나온다." width="1300" height="598" loading="lazy">
+      <figcaption>자세·높이별 평균 깊이 오차(추정 − 참값). 주황이 지금 조종 방식, 파랑·초록이 피드백에서 나온 보정 후보. 거리 4개 × 2회 평균.</figcaption>
+    </figure>
+    <div class="callout callout-finding">
+      <span class="tag">발견</span>
+      <p><b>큐브를 집으러 갈 때의 손(엄지·검지를 붙이고 기울인 손)이 평균 10~12 cm, 항상 "멀다" 쪽으로 틀린다.</b> 그 밖에 65 cm에서 +9.6 cm,
+        화면 오른쪽 끝에서 −4.7 cm. 방향이 일정한 치우침이라 보정할 여지가 있다.</p>
+    </div>
+
+    <h3 class="sub"><span class="idx">9.2</span>피드백에서 나온 보정 후보는 이기지 못했다</h3>
+    <p>8장의 후보 두 개를, 방식마다 초점거리를 1회차 일부로 맞추고 나머지 56단계로 공정하게 비교했다.</p>
+    <div class="tbl-outer"><table class="cfgtable">
+      <tr><th>방식</th><th class="num">평균 절대 오차</th><th class="num">조건 간 범위</th><th class="num">집은 손·기울임</th></tr>
+      <tr><td class="key">길이·너비 중 작은 값 (지금)</td><td class="num"><b>5.8</b></td><td class="num">12.2</td><td class="num">+11.3</td></tr>
+      <tr><td class="key">길이, 화면과 나란한 성분 (후보 1)</td><td class="num">6.3</td><td class="num"><b>10.0</b></td><td class="num">+9.8</td></tr>
+      <tr><td class="key">손목–새끼 뿌리, 화면 성분 (후보 2)</td><td class="num">7.8</td><td class="num">11.4</td><td class="num">+10.4</td></tr>
+      <tr><td class="key">길이, 3D 전체 (예비 측정 방식)</td><td class="num">10.3</td><td class="num">26.3</td><td class="num">+23.0</td></tr>
+    </table></div>
+    <div class="callout callout-lesson">
+      <span class="tag">비교 기준을 바로잡기</span>
+      <p>후보 1은 예비 측정에서 "길이 3D 전체" 대비 오차를 반으로 줄였지만(+12.7 → +6.0), 조종은 이미 "길이·너비 중 작은 값"을 쓰고 있었다.
+        그것과 비교하면 뚜렷이 낫지 않았다. 남는 가장 큰 오차는 구간 선택이 아니라 <b>자세에 따른 일정한 치우침</b>이라, 조건 ③을 "구간 바꾸기"에서
+        "자세별 치우침을 데이터로 빼는 보정"으로 바꿨다(11장).</p>
+    </div>
+    <p class="muted">한계: 한 사람(오른손), 한 웹캠, 한 번의 측정 세션. 기울기 45°는 눈대중. 가만히 있는 손만 쟀다.</p>
+  </section>
+
+  <!-- ================= 10 ================= -->
+  <section class="track" id="track-related">
+    <div class="track-head">
+      <span class="chip chip-new">조사 → 설계 근거</span>
+      <h2>관련 연구 다시 찾기 — 비전 학회와 인용 따라가기</h2>
+      <p class="desc">동기의 조언(비전 학회도 보라)과 9장 결과를 받아, 보정을 만들기 전에 다시 찾았다. 2026-10-03 기준, 찾은 범위에서의 정리다.</p>
+    </div>
+
+    <div class="tbl-outer"><table class="cfgtable">
+      <tr><th>연구</th><th>한 것</th><th>이 프로젝트와의 관계</th></tr>
+      <tr><td class="key">RootNet (ICCV 2019)</td><td>한 장의 사진에서 사람까지 거리: 핀홀로 구한 거리에 <b>이미지로 학습한 보정 계수</b>를 곱한다. 자세가 바뀌면 같은 거리에서도 사진 속 크기가 달라지는 문제를 이렇게 풀었다</td><td>우리 문제와 구조가 같다(손 자세에 따라 핀홀 거리가 일정하게 틀림) → 조건 ③을 이 구조의 가벼운 손 버전으로</td></tr>
+      <tr><td class="key">HandDGP (ECCV 2024) · HaMeR (CVPR 2024) · WiLoR (CVPR 2025)</td><td>학습으로 손의 절대 위치·모양을 복원</td><td>더 정확할 수 있지만 GPU가 필요하다 — "노트북 웹캠만으로"와 맞지 않아 주 보정으로는 안 쓴다</td></tr>
+      <tr><td class="key">AnyTeleop (RSS 2023)</td><td>RGB만 쓴 조종 vs 깊이 카메라 조종. 피아노 과제: 단일 RGB 109초·오류 28.1%, 단일 RGB-D 87초·21.8%</td><td>RGB 조종이 <b>조종 성능</b>에서 손해임을 보였다. 그 시범으로 학습한 정책은 비교하지 않았다</td></tr>
+      <tr><td class="key">TeleOpBench (2025)</td><td>시뮬레이션 30과제에서 조종 방식 4가지(모션캡처·VR·외골격·<b>단안 카메라 손 추적</b>)를 같은 기준으로 비교</td><td>역시 조종 성능 비교. 정책 학습과 깊이 오차 분석은 없다</td></tr>
+      <tr><td class="key">Vision-Based Hand Shadowing (IEEE Access 2026)</td><td><b>SO-101</b>을 깊이 카메라 손 추적 + 역기구학으로 조종</td><td>같은 로봇. 깊이 카메라를 썼고 손 시범으로 정책을 학습하진 않았다</td></tr>
+    </table></div>
+    <p><b>인용 따라가기:</b> 가장 가까운 논문 셋(AnyTeleop, 시범 방식 비교 ICRA 2025, 데이터 품질 NeurIPS 2023)을 인용한 논문 487편을 모아,
+      카메라·손 추적과 조종·시범 키워드가 둘 다 있는 44편을 읽었다. 대부분 사람 동영상으로 로봇 손을 가르치거나 VR·외골격 같은 다른 장비였다.</p>
+    <div class="callout callout-finding">
+      <span class="tag">결론 (2026-10-03, 찾은 범위에서)</span>
+      <p>단안 카메라 조종이 <b>조종 성능</b>에서 손해라는 건 AnyTeleop과 TeleOpBench가 이미 보였다. 그 손해가 <b>학습한 로봇의 성공률</b>까지 이어지는지,
+        그중 깊이 오차의 몫이 얼마인지, 보정하면 얼마나 돌아오는지를 잰 연구는 찾지 못했다 — 이 프로젝트가 재는 칸이다. 인용 데이터베이스가 최신 논문을
+        늦게 잡을 수 있어, 결과를 정리하기 전에 한 번 더 찾는다.</p>
+    </div>
+  </section>
+
+  <!-- ================= 11 ================= -->
+  <section class="track" id="track-correction">
+    <div class="track-head">
+      <span class="chip chip-new">조건 ③</span>
+      <h2>깊이 보정 — 손 모양을 바꿀 때 튐 43% 감소</h2>
+      <p class="desc">핀홀 거리 × 손 자세로 예측한 보정 계수. 9장 측정의 1회차로만 맞추고, 2회차로 평가했다.</p>
+      <div class="track-meta"><span>코드 <b>depth_correction.py · fit_depth_correction.py</b></span><span>계산 <b>노트북 CPU, 매 프레임</b></span></div>
+    </div>
+    <ul>
+      <li>특징 6개(조종 중 매 프레임 MediaPipe 값만으로): 핀홀 거리, 엄지-검지 비율, 손바닥 앞뒤 기울기, 손바닥 법선의 카메라 방향 성분, 화면 가로·세로 위치.</li>
+      <li>log(참값 / 핀홀 거리)를 능형 회귀로 예측. 정규화 세기와 특징 조합은 1회차 안에서 정했고, 2회차는 고르는 데도 쓰지 않았다.
+        보정 계수는 1회차에서 본 범위(×0.72~×1.13) 밖으로 나가지 않게 했다.</li>
+      <li>평가 지표는 조종에 맞췄다. 조종은 손의 <b>이동량</b>으로 움직여서 일정한 평균 오차는 상관없고, 손 모양을 바꿀 때 튀는 폭과 앞뒤 배율이 중요하다.</li>
+    </ul>
+    <div class="tbl-outer"><table class="cfgtable">
+      <tr><th>2회차 (처음 보는 측정), cm</th><th class="num">손 모양 바꿀 때 튐</th><th class="num">자세 간 치우침 범위</th><th class="num">앞뒤 배율 (1이 정답)</th><th class="num">흔들림</th></tr>
+      <tr><td class="key">지금 방식 (조건 ②)</td><td class="num">9.9</td><td class="num">10.3</td><td class="num">1.18</td><td class="num">0.55</td></tr>
+      <tr><td class="key">배율만 다시 맞춤</td><td class="num">9.0</td><td class="num">9.4</td><td class="num">1.08</td><td class="num">0.51</td></tr>
+      <tr><td class="key">자세 보정 (조건 ③)</td><td class="num"><b>5.6</b></td><td class="num"><b>4.2</b></td><td class="num">0.90</td><td class="num">0.55</td></tr>
+    </table></div>
+    <figure class="shot" style="max-width:820px">
+      <img src="img/depth-correction.png" alt="자세·높이 8조건별 깊이 오차. 지금 방식은 집은 손을 기울일 때 +7~9 cm, 보정 후에는 모든 조건이 −4~+0.2 cm 사이." width="1300" height="572" loading="lazy">
+      <figcaption>1회차로 맞추고 2회차로 평가. 보정 후 치우침 범위는 줄었지만 모든 조건이 음수 쪽(조금 너무 고침).</figcaption>
+    </figure>
+    <div class="callout callout-warn">
+      <span class="tag">다 없애지는 못했다</span>
+      <p>2회차에서는 모든 조건을 조금 너무 고쳤다. 1회차의 집은 손·기울임은 +12.9/+15.1 cm였는데 2회차는 +7.4/+9.4 cm로 덜 틀렸고,
+        기울기 특징값은 두 회차가 거의 같았다(0.73 vs 0.72). 같은 자세로 보이는데 5~6 cm 다르게 틀리는 부분은 이 특징으로는 설명되지 않는다.
+        그래서 조건 ②와 ③의 학습 결과 차이는 "깊이 치우침을 <b>이만큼</b> 줄였을 때 회복되는 몫"으로 읽어야 한다.</p>
+    </div>
+  </section>
+
+  <!-- ================= 12 ================= -->
+  <section class="track" id="track-recording">
+    <div class="track-head">
+      <span class="chip chip-personal">직접 녹화 100개</span>
+      <h2>웹캠 시범 100개 녹화 — 규칙을 세 번 고치고</h2>
+      <p class="desc">학습 배치 50개를 보정 없음(②)과 보정(③)으로 한 번씩, 총 100개. 녹화하며 나온 불편을 기록으로 확인해 규칙을 고쳤고, 고칠 때마다 처음부터 다시 했다.</p>
+      <div class="track-meta"><span>본 녹화 <b>104번 시도 → 100개 성공</b></span><span>기록 시간 <b>66분</b></span><span>코드 <b>record_demos.py · teleop_rig.py</b></span></div>
+    </div>
+
+    <h3 class="sub"><span class="idx">12.0</span>녹화 규칙</h3>
+    <ul>
+      <li>5개씩 10블록. 블록마다 같은 5개를 한 조건으로 다 하고 다른 조건으로 다시. 먼저 할 조건은 블록마다 ABBA로 바꿔 연습 효과·피로가 한쪽에 쌓이지 않게 했다.</li>
+      <li><b>조작자에게 조건을 숨겼다</b>(화면에 ②·③ 표시 없음, 기록에만 남음).</li>
+      <li>한 시도 90초, 같은 배치는 3번까지. 포기도 실패 1회로 셈. 시도마다 바로 저장해서 중간에 꺼도 이어서 한다.</li>
+      <li>②와 ③은 같은 조종 코드를 쓰고 깊이 보정을 켜느냐만 다르다. 코드를 나누기 전후로 같은 손 입력에서 목표 위치·집게가 프레임마다 같은지 확인했다.</li>
+    </ul>
+
+    <h3 class="sub"><span class="idx">12.1</span>녹화하며 고친 것</h3>
+    <div class="tbl-outer"><table class="cfgtable">
+      <tr><th>느낀 것</th><th>기록에서 확인한 원인</th><th>바꾼 것</th></tr>
+      <tr><td>놓는 순간 너무 흔들린다 (첫 시도, 시간 초과)</td><td>큐브를 들고 내리는 중 엄지-검지 비율이 <b>한 프레임만</b> 여는 기준을 넘어 집게가 순간 열림 → 4 cm에서 떨어짐. 90초 동안 "깜빡 열림" 5번</td><td>기준을 넘은 상태가 3프레임(0.1초) 이어져야 집게를 바꿈. 깜빡 열림 5 → 0, 이전 기록의 여닫기는 그대로</td></tr>
+      <tr><td>왼손으로 집고 오른손으로 옮기면 더 잘 된다 (1블록 14번 시도, 10개 성공)</td><td>조종 중 손이 바뀌면 새 손을 옛 손 기준으로 계산해 로봇이 2~8 cm 튐(한 시도에서 손 바뀜 46번). 깊이 보정은 오른손으로만 맞췄다</td><td><b>오른손만.</b> 왼손이 섞인 4개만 다시 하면 그중 3개가 한 조건이라 연습 효과가 쏠려서, 1블록 전체를 다시 함</td></tr>
+      <tr><td>흔들림이 갑자기 전반적으로 심해졌다 (오른손 3번째 시도에서 중단)</td><td>처리 속도·손 거리는 그대로였고, 손바닥이 점점 옆으로 돌아갔다(법선 성분 0.77 → 0.40). 프레임 간 깊이 튐 1.4 → 25 cm. 9장 측정은 거의 다 0.64 이상</td><td>0.6 아래면 화면에 "TURN PALM TO CAMERA" 경고(표시만). 손목을 돌리지 않고 <b>창문 닦듯이</b> 팔로 옮기는 요령</td></tr>
+    </table></div>
+
+    <h3 class="sub"><span class="idx">12.2</span>직접 한 측정·녹화 (기록 파일 기준)</h3>
+    <div class="tbl-outer"><table class="cfgtable">
+      <tr><th>언제</th><th>무엇</th><th class="num">횟수</th><th class="num">기록 시간</th></tr>
+      <tr><td class="key">10-01</td><td>깊이 예비 측정 (2장)</td><td class="num">10단계</td><td class="num">—</td></tr>
+      <tr><td class="key">10-01~02</td><td>조종 연습·시험 (4~6장)</td><td class="num">기록 14개</td><td class="num">20분</td></tr>
+      <tr><td class="key">10-02~03</td><td>정식 깊이 측정 (9장)</td><td class="num">70단계 (실제 92번)</td><td class="num">—</td></tr>
+      <tr><td class="key">10-03</td><td>녹화 규칙 다듬기 (시험 녹화 3번)</td><td class="num">19번 시도 (끊긴 것 포함)</td><td class="num">34분</td></tr>
+      <tr><td class="key">10-03</td><td><b>본 녹화</b></td><td class="num"><b>104번 → 100개</b></td><td class="num">66분</td></tr>
+    </table></div>
+    <p class="muted">기록 시간은 손이 화면에 있던 시간(쉬는 시간 제외). 측정은 단계마다 2초(60프레임)씩 재고 다음 자세로 옮기는 방식이라 따로 세지 않았다.</p>
+
+    <h3 class="sub"><span class="idx">12.3</span>결과</h3>
+    <div class="tbl-outer"><table class="cfgtable">
+      <tr><th></th><th class="num">② 보정 없음</th><th class="num">③ 깊이 보정</th></tr>
+      <tr><td class="key">성공</td><td class="num">50/50</td><td class="num">50/50</td></tr>
+      <tr><td class="key">시도 수 · 첫 시도 성공</td><td class="num">51 · 49</td><td class="num">53 · 47</td></tr>
+      <tr><td class="key">성공까지 시간 중앙값</td><td class="num">25.5초</td><td class="num">28.9초</td></tr>
+    </table></div>
+    <ul>
+      <li>같은 배치끼리 짝지어 비교하면 시간 차이 평균 −2.6초, 부호 뒤집기 검정 p = 0.42 — <b>녹화 단계에서는 두 조건 차이가 보이지 않았다.</b>
+        사람이 화면을 보며 바로잡기 때문에 조종 성공·시간에는 보정 효과가 드러나지 않는다. 차이가 있다면 시범의 <b>궤적</b>에 남아 있고,
+        그게 학습한 로봇의 성공률에서 드러나는지가 연구 질문이다.</li>
+      <li>성공까지 시간 중앙값은 첫 블록 34초, 그 뒤 21~38초. 같은 배치를 두 번째로 할 때 더 빠르지도 않았다(p = 0.49).</li>
+      <li>손바닥 방향은 시범별 중앙값 0.75 이상(첫 50개 기준), 프레임 간 깊이 튐(95%)은 중앙 1.3 cm로 안정적이었다.</li>
+    </ul>
+    <div class="callout callout-finding">
+      <span class="tag">녹화하며 나온 소감 — 한계로 남김</span>
+      <p>"스페이스로 다시 시작하면 가끔 인식을 못 하고, 집게를 움직이면 깨어난다" → 다시 시작하는 순간 손이 반쯤 오므려져 있으면 집기 잠금(6장)이 팔을 고정했다
+        (465번 중 9%, 가장 길게 6.4초). "빠르게 움직이면 못 따라온다" → 평활·깊이 게이트·모터 속도(약 0.3초 반응).
+        "손을 내리면 로봇이 앞으로 같이 간다" → 두 손 연습 기록에서는 내릴 때 깊이가 가깝게 읽혔지만, 본 녹화에서는 방향이 일정하지 않았다.
+        모두 두 조건에 같은 처리라 비교는 공정하고, 녹화가 끝난 뒤라 고치지 않았다. 웹캠 범위가 좁아 클러치(스페이스)는 시도 하나당 중앙 4번 썼다.</p>
+    </div>
+  </section>
+
+  <!-- ================= 13 ================= -->
   <section class="track" id="track-next">
     <div class="track-head">
       <span class="chip chip-personal">계획</span>
       <h2>다음 단계</h2>
     </div>
     <ol>
-      <li><b>정식 깊이 측정:</b> 참값과 비교 — 손 기울기, 손 높이(카메라가 보는 각도), 손 모양(오므리기). 이 오차 패턴이 조건 ③ 보정과 ④ 가짜 오차의 근거다.
-        깊이 오차는 좌우·위아래로도 번진다(손 위치의 x, y도 깊이를 곱해 계산하므로) — ④에 이 전파도 넣는다.</li>
-      <li><b>관련 연구 다시 조사</b>(피드백 반영) → <b>조건 ③ 보정, ④ 데이터셋 만들기</b></li>
-      <li><b>웹캠 시범 녹화:</b> 조종할수록 실력이 늘기 때문에, 보정 전(②)과 후(③)를 <b>번갈아</b> 모아 연습 효과가 한쪽에만 쌓이지 않게 한다. 같은 배치 50개씩, 실패한 시도와 걸린 시간도 기록.</li>
-      <li><b>네 조건 학습·비교:</b> 같은 평가 배치 100개, 같은 판정으로 성공률 비교 — 연구 질문의 답.</li>
+      <li><b>②·③ 데이터셋 만들기</b> — 녹화한 숫자로 장면을 다시 세워 시뮬레이션 카메라 화면을 그린다(웹캠 영상은 넣지 않는다).</li>
+      <li><b>조건 ④</b> — 스크립트 시범에 ② 녹화의 실제 손 자세 흐름과 9장에서 잰 치우침을 넣는다. "실측 오차 패턴"이 되도록 녹화 뒤로 미뤘다.</li>
+      <li><b>네 조건 학습·비교</b> — 같은 평가 배치 100개, 같은 판정. 연구 질문의 답.</li>
       <li>(선택) 실물 SO-101.</li>
     </ol>
   </section>
@@ -675,12 +881,18 @@
       <li>논문: Li, Cui, Sadigh, <a href="https://arxiv.org/abs/2503.07017" target="_blank" rel="noopener">How to Train Your Robots? The Impact of Demonstration Modality on Imitation Learning</a> (ICRA 2025);
         Belkhale, Cui, Sadigh, <a href="https://arxiv.org/abs/2306.02437" target="_blank" rel="noopener">Data Quality in Imitation Learning</a> (NeurIPS 2023);
         Mandlekar et al., <a href="https://robomimic.github.io/study/" target="_blank" rel="noopener">What Matters in Learning from Offline Human Demonstrations for Robot Manipulation</a> (CoRL 2021)</li>
-      <li>전체 조사 기록: <a href="https://github.com/kheechan04/webcam-teach-robot/blob/main/docs/00-research.md" target="_blank" rel="noopener">docs/00-research.md</a></li>
+      <li>재조사(10장): Moon et al., <a href="https://arxiv.org/abs/1907.11346" target="_blank" rel="noopener">RootNet</a> (ICCV 2019);
+        Qin et al., <a href="https://arxiv.org/abs/2307.04577" target="_blank" rel="noopener">AnyTeleop</a> (RSS 2023);
+        <a href="https://arxiv.org/abs/2505.12748" target="_blank" rel="noopener">TeleOpBench</a> (2025);
+        Chiche et al., <a href="https://arxiv.org/abs/2603.11383" target="_blank" rel="noopener">Vision-Based Hand Shadowing for Robotic Manipulation via Inverse Kinematics</a> (IEEE Access 2026);
+        <a href="https://arxiv.org/abs/2407.15844" target="_blank" rel="noopener">HandDGP</a> (ECCV 2024); <a href="https://geopavlakos.github.io/hamer/" target="_blank" rel="noopener">HaMeR</a> (CVPR 2024);
+        <a href="https://arxiv.org/abs/2409.12259" target="_blank" rel="noopener">WiLoR</a> (CVPR 2025)</li>
+      <li>전체 조사 기록: <a href="https://github.com/kheechan04/webcam-teach-robot/blob/main/docs/00-research.md" target="_blank" rel="noopener">docs/00-research.md</a>, <a href="https://github.com/kheechan04/webcam-teach-robot/blob/main/docs/07-related-work-v2.md" target="_blank" rel="noopener">docs/07-related-work-v2.md</a></li>
     </ul>
   </section>
 
   <footer>
-    <p>진행 중인 프로젝트다. 마일스톤이 끝날 때마다 이 기록을 갱신한다. 마지막 갱신 2026-10-02.
+    <p>진행 중인 프로젝트다. 마일스톤이 끝날 때마다 이 기록을 갱신한다. 마지막 갱신 2026-10-03.
       · 저장소 <a href="https://github.com/kheechan04/webcam-teach-robot" target="_blank" rel="noopener">github.com/kheechan04/webcam-teach-robot</a> (공개)</p>
   </footer>
 

@@ -118,18 +118,18 @@
     <div class="eyebrow">portfolio · physical ai · 진행 중</div>
     <h1>김희찬</h1>
     <p class="role">웹캠으로 보여 준 시범만으로 시뮬레이션 로봇팔(SO-101)을 가르치고, 웹캠의 깊이 오차가
-      모방 학습 결과를 얼마나 깎아 먹는지 재는 개인 프로젝트입니다. 웹캠 조종으로 큐브를 옮기는 데 성공했고,
-      프로그램 시범으로 학습시킨 로봇이 처음 보는 배치에서 혼자 과제를 해내는 것까지 확인했습니다.</p>
+      모방 학습 결과를 얼마나 깎아 먹는지 재는 개인 프로젝트입니다. 참값과 비교한 깊이 측정으로 깊이 보정을 만들었고,
+      웹캠 시범을 보정 전·후 50개씩 직접 녹화했습니다. 다음은 네 조건으로 학습시켜 성공률을 비교하는 단계입니다.</p>
     <div class="meta-row">
       <span>저장소 <a class="link-line" href="https://github.com/kheechan04/webcam-teach-robot" target="_blank" rel="noopener">github.com/kheechan04/webcam-teach-robot</a> (공개)</span>
       <span>전체 시행착오 기록 <a class="link-line" href="full.html">개인 기록용 포트폴리오 →</a></span>
-      <span>마지막 갱신 <b class="mono">2026-10-02</b></span>
+      <span>마지막 갱신 <b class="mono">2026-10-03</b></span>
     </div>
     <div class="badge-row">
       <div class="badge"><div class="v">88 / 100</div><div class="l">학습한 로봇이 처음 보는 배치에서 성공 (조건 ①, 시험 학습)</div></div>
-      <div class="badge"><div class="v">+12.7 cm</div><div class="l">손바닥을 기울였을 때 평균 깊이 오차 (펴면 −2.7 cm, 예비 측정)</div></div>
-      <div class="badge"><div class="v">14 vs 5 cm</div><div class="l">손가락을 여닫는 순간 vs 평소의 깊이 출렁임 (1.2초 동안)</div></div>
-      <div class="badge"><div class="v">5 / 11</div><div class="l">마일스톤 진행 (조사 → 조종 → 과제 → 데이터 → 시험 학습 …)</div></div>
+      <div class="badge"><div class="v">+10~12 cm</div><div class="l">큐브를 집는 손의 깊이 오차 (참값 비교 70단계)</div></div>
+      <div class="badge"><div class="v">100 / 104</div><div class="l">직접 녹화한 웹캠 시범 (시도 104번, 보정 전·후 50개씩)</div></div>
+      <div class="badge"><div class="v">8 / 11</div><div class="l">마일스톤 진행 (… 깊이 측정 → 보정 → 시범 녹화, 다음: 네 조건 학습)</div></div>
     </div>
   </header>
 
@@ -143,7 +143,8 @@
       <p class="pitch">
         웹캠으로 시뮬레이션 로봇을 조종해 시범을 모으고 모방 학습(ACT)까지 하는 공개 프로젝트는 이미 있었습니다.
         다만 거기 보고된 성공률은 프로그램이 만든 시범으로 학습한 값이었고, 시범 방식별 학습 결과를 비교한 ICRA 2025 논문에도
-        웹캠 손 추적은 없었습니다(2026-10-01 기준, 찾은 범위에서). 그래서 같은 과제를 네 가지 시범으로 학습시켜 비교하기로 했습니다.
+        웹캠 손 추적은 없었습니다. 단안 카메라 조종이 조종 성능에서 손해라는 비교(AnyTeleop, TeleOpBench)는 있었지만, 그 시범으로 학습한 로봇의
+        성공률까지 잰 연구는 관련 논문을 인용한 487편을 훑어도 찾지 못했습니다(2026-10-03 기준, 찾은 범위에서). 그래서 같은 과제를 네 가지 시범으로 학습시켜 비교합니다.
       </p>
       <table class="cond">
         <tr><th>조건</th><th>시범 데이터</th><th>알 수 있는 것</th></tr>
@@ -162,30 +163,29 @@
 
     <article class="card">
       <div class="card-top">
-        <h2>웹캠 깊이 오차 예비 측정</h2>
-        <span class="period mono">2026.10 · 1단계</span>
+        <h2>웹캠 깊이 오차 측정과 보정</h2>
+        <span class="period mono">2026.10 · 측정 80단계 · 조건 ③</span>
       </div>
       <p class="pitch">
-        줄자로 30~70 cm에 손을 두고, 손바닥 크기로 추정한 거리와 비교했습니다. 손바닥을 펴면 평균 −2.7 cm로 잘 맞았지만,
-        물건을 잡으러 갈 때처럼 기울이면 평균 +12.7 cm 멀게 잡히고 흔들림도 약 8배로 커졌습니다.
+        줄자로 거리를 재 둔 자리에 손을 두고, 손바닥 크기로 추정한 거리와 비교했습니다. 예비 측정(10단계)에 이어 거리·손 모양·손 높이를 바꾼
+        정식 측정(70단계)에서, 큐브를 집으러 갈 때의 손(엄지·검지를 붙이고 기울인 손)이 평균 10~12 cm, 항상 멀게 틀린다는 걸 찾았습니다.
       </p>
       <figure class="shot">
-        <img src="img/depth-error.png" alt="실제 거리와 웹캠 추정 거리 그래프. 손바닥을 펴면 대각선 근처, 기울이면 위쪽으로 떨어진다. 너비로 추정하면 기울였을 때 차이가 줄어든다." width="1430" height="650" loading="lazy">
-        <figcaption>왼쪽: 손바닥 길이로 추정 · 오른쪽: 손바닥 너비로 추정. 막대는 2초간 흔들림(±1σ). 한 사람·한 번의 예비 측정.</figcaption>
+        <img src="img/depth-correction.png" alt="손 모양과 높이 8가지 조건별 깊이 오차. 지금 방식은 집은 손을 기울일 때 +7~9 cm, 보정 후에는 −4~+0.2 cm 사이." width="1300" height="572" loading="lazy">
+        <figcaption>측정 1회차로 맞춘 보정을 2회차에 적용한 결과. 주황: 지금 방식, 파랑: 자세 보정. 한 사람·한 웹캠.</figcaption>
       </figure>
       <ul class="highlights">
-        <li>원인: MediaPipe의 3D 손 모델이 기울어진 손바닥을 6.5~7.0 cm로 봄(실제 10.0 cm) — 이전 웹캠 게임에서 본 "깊이가 눌린다" 현상이
-          손 모델 안에서도 일어나는 것을 숫자로 확인.</li>
-        <li>손바닥 너비로 추정하면 기울였을 때 오차가 +12.7 → +4.9 cm로 줄어듦.</li>
-        <li>진행 과정을 비공개 SNS 계정으로 동기·친구들에게 공유해 받은 질문 두 개를 계기로 분석을 추가 — 3D 길이 전체 대신 화면과 나란한 성분만 쓰면
-          기울였을 때 오차 +12.7 → +6.0 cm, 손가락을 여닫는 순간 깊이 튐은 검지 쪽 손바닥 구간이 가장 크고 새끼손가락 쪽이 가장 작음.
-          조건 ③ 깊이 보정 후보가 됨(예비).</li>
+        <li>원인 확인(예비): MediaPipe의 3D 손 모델이 기울어진 손바닥을 6.5~7.0 cm로 봄(실제 10.0 cm).</li>
+        <li>동기의 질문에서 나온 보정 후보 두 개는 정식 측정에서 공정하게 비교하니 기존 방식을 뚜렷이 이기지 못함 — 남는 오차가 "자세에 따른 일정한 치우침"이라는 걸 확인.</li>
+        <li>비전 학회 연구 RootNet(ICCV 2019)의 "핀홀 거리 × 학습한 보정" 구조를 손에 맞게 가볍게 적용(노트북 CPU 실시간). 처음 보는 측정에서
+          손 모양을 바꿀 때 깊이 튐 9.9 → 5.6 cm. 다 없애진 못하고 조금 너무 고치는 것도 그대로 기록.</li>
       </ul>
       <div class="tags">
-        <span class="tag">MediaPipe Hand Landmarker</span><span class="tag">핀홀 카메라 모델</span><span class="tag">matplotlib</span>
+        <span class="tag">MediaPipe Hand Landmarker</span><span class="tag">핀홀 카메라 모델</span><span class="tag">능형 회귀</span>
+        <span class="tag">맞춤·평가 데이터 분리</span>
       </div>
       <div class="card-foot">
-        <a class="readmore" href="full.html#track-depth">측정 방법과 한계 보기</a>
+        <a class="readmore" href="full.html#track-depth-formal">측정·보정 기록 보기</a>
       </div>
     </article>
 
@@ -251,11 +251,39 @@
       </div>
     </article>
 
+    <article class="card">
+      <div class="card-top">
+        <h2>웹캠 시범 100개 녹화</h2>
+        <span class="period mono">2026.10 · 조건 ②·③</span>
+      </div>
+      <p class="pitch">
+        학습 배치 50개를 깊이 보정 없이(②) 한 번, 보정을 켜고(③) 한 번 직접 조종해 시범 100개를 녹화했습니다. 연습 효과가 한쪽에 쌓이지 않게
+        5개씩 번갈아 하고, 지금이 어느 조건인지는 화면에 보이지 않게 했습니다.
+      </p>
+      <table class="cond">
+        <tr><th>단계</th><th>무엇</th><th>횟수</th></tr>
+        <tr><td>측정</td><td>깊이 예비 측정 · 정식 측정</td><td>10단계 · 70단계(실제 92번)</td></tr>
+        <tr><td>연습</td><td>조종 시험 · 녹화 규칙 다듬기</td><td>기록 14개 · 시도 19번</td></tr>
+        <tr><td>녹화</td><td>본 녹화 (보정 전·후 50개씩)</td><td>시도 104번 → 100개 성공, 66분</td></tr>
+      </table>
+      <ul class="highlights">
+        <li>녹화 규칙을 세 번 고치고 그때마다 처음부터 다시 함 — 손 인식이 한 프레임 튀어 집게가 순간 열림(→ 0.1초 확인), 손을 바꿔 쥐면 로봇이 2~8 cm 튐(→ 오른손만),
+          손바닥이 옆으로 돌면 깊이 튐이 1.4 → 25 cm(→ 화면 경고, 손목을 돌리지 않고 팔로 옮기기).</li>
+        <li>녹화 단계에서는 두 조건의 성공·시간 차이가 없었음(50/50 vs 50/50, 짝 비교 p = 0.42). 사람이 화면을 보며 바로잡기 때문 — 차이가 학습한 로봇에서 드러나는지가 다음 단계.</li>
+      </ul>
+      <div class="tags">
+        <span class="tag">ABBA 순서</span><span class="tag">조건 가리기</span><span class="tag">시도마다 저장·이어 하기</span>
+      </div>
+      <div class="card-foot">
+        <a class="readmore" href="full.html#track-recording">녹화 기록 보기</a>
+      </div>
+    </article>
+
   </section>
 
   <footer>
-    <p>진행 중인 프로젝트라 마일스톤이 끝날 때마다 이 페이지를 갱신합니다. 다음은 참값과 비교하는 정식 깊이 측정과 관련 연구 재조사,
-      그다음 깊이 보정을 만들고 웹캠 시범(보정 전·후)을 번갈아 모아 네 조건을 비교하는 것입니다.
+    <p>진행 중인 프로젝트라 마일스톤이 끝날 때마다 이 페이지를 갱신합니다. 다음은 녹화한 시범으로 데이터셋을 만들고, 깊이 오차만 넣은 조건 ④를 만든 뒤,
+      네 조건을 같은 평가 배치에서 학습·비교하는 것입니다.
       모든 수치는 직접 잰 값이고, 예비 측정은 예비 측정이라고 적었습니다.</p>
     <a class="full-link link-line" href="full.html">→ 웹캠으로 로봇팔 가르치기 포트폴리오(개인 기록용) 전체 보기</a>
   </footer>
