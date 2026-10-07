@@ -80,18 +80,10 @@
   .tags{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
   .tag{ background:var(--tag-bg); color:var(--tag-text); font-family:"IBM Plex Mono",monospace; font-size:.76rem; padding:5px 11px; border-radius:99px; }
 
-  .cond{ width:100%; border-collapse:collapse; margin:0 0 22px; font-size:.9rem; }
-  .cond th{ text-align:left; font-size:.74rem; color:var(--text-faint); font-weight:500; padding:6px 10px; border-bottom:1px solid var(--border-strong); }
-  .cond td{ padding:8px 10px; border-bottom:1px solid var(--border); vertical-align:top; }
-  .cond td:first-child{ font-family:"IBM Plex Mono",monospace; color:var(--accent-strong); white-space:nowrap; }
-  .cond tr:last-child td{ border-bottom:none; }
 
   .shot{ margin:0 0 22px; }
   .shot img{ display:block; width:100%; height:auto; border-radius:10px; border:1px solid var(--border); background:#fcfcfb; }
   .shot figcaption{ font-size:.78rem; color:var(--text-faint); margin-top:6px; }
-  .duo{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:0 0 22px; }
-  .duo .shot{ margin:0; }
-  @media (max-width:600px){ .duo{ grid-template-columns:1fr; } }
 
   .card-foot{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; border-top:1px solid var(--border); padding-top:18px; }
   .readmore{ font-weight:600; display:inline-flex; align-items:center; gap:6px; }
@@ -106,7 +98,6 @@
 
   @media (max-width:600px){
     .card{ padding:22px; }
-    .cond{ font-size:.84rem; }
   }
 </style>
 </head>
