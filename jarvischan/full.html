@@ -326,6 +326,7 @@
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-26</div><div class="tl-label">링크 미리보기 추가<br>카카오톡 공유 카드·favicon</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">09-26</div><div class="tl-label">아이폰 대답 소리·연속 대화<br>실기기 로그와 순서 실험으로 해결</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">10-27</div><div class="tl-label">에이전트를 내 노트북에 맞춤<br>명령 16개·루틴·플로팅 아이콘</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">10-29</div><div class="tl-label">"열었다고 해놓고 안 열림"<br>결과 확인 후 대답·유튜브 재생</div></div>
       </div>
     </div>
     <p class="muted">구성: 정적 페이지 <code>index.html</code>(빌드 과정 없음) + Vercel 서버 함수
@@ -911,6 +912,36 @@
         아이콘으로 대화가 되는지는 아직 확인하지 못했다.
       </p>
     </div>
+
+    <h3 class="sub" id="track-agent-honest"><span class="idx">5.6</span>"열었다고 해놓고 안 열어" — 실사용 피드백 (10-29)</h3>
+    <p>
+      새 버전을 실제로 써 보니 두 가지가 걸렸다. 로컬 폴더를 열어달라고 하면 열었다고 말하고는 아무것도
+      안 열렸고, 유튜브를 열고 첫 영상을 틀어달라고 하면 하지 못했다.
+    </p>
+    <div class="callout callout-finding">
+      <span class="tag">진단 — 버그 하나, 구조 문제 하나</span>
+      <p>
+        폴더가 안 열린 건 단순한 버그였다. "jarvischan"처럼 이름만 받은 경로를 <code>path.resolve()</code>로
+        풀어서, 에이전트 자기 폴더 안에서 찾고 있었다. 더 큰 문제는 "열었어요"라는 거짓말이었다. 음성 대답은
+        에이전트가 명령을 실행하기 <i>전에</i> 만들어지는 구조(5.0)라서, 명령이 실패해도 LLM이 써 둔
+        성공 문장이 그대로 나갔다. 5.0에서 "진짜 결과는 로그·배너로 따로 보여준다"고 정리했던 부분인데,
+        음성 비서에서 사람이 듣는 건 대답뿐이라 배너로는 부족했다.
+      </p>
+    </div>
+    <ul>
+      <li><b>이름으로 찾기</b> — 별칭도 전체 경로도 아니면 바탕화면·문서·다운로드·홈 폴더에서 이름으로 찾는다.
+        열고 나면 그 탐색기 창을 맨 앞으로 가져온다. 백그라운드 프로그램이 띄운 창은 브라우저 뒤에 깔리기 쉬워서,
+        열려도 안 열린 것처럼 보일 수 있기 때문이다.</li>
+      <li><b>결과를 본 뒤에 말하기</b> — 페이지가 기기 명령 결과를 기다렸다가 말하고, 실패하면 LLM 대답 대신
+        "찾지 못했어요" 같은 실패 문장을 말한다. 대화 기록도 고쳐서 다음 턴이 "아까 열었으니"로 이어지지 않게 했다.
+        대가는 명령을 실행하는 만큼 대답이 늦어진다는 점이다.</li>
+      <li><b>앱 안 조작은 여전히 안 한다</b> — 앱 안의 버튼을 누르려면 키보드·마우스 흉내가 필요한데, 잘못 들었을 때
+        엉뚱한 걸 누를 수 있어 처음부터 뺀 기능이다. 대신 할 수 있는 척하지 않고 바로 못 한다고 말하게 했다.
+        유튜브만 키 없이 검색 결과 첫 영상의 주소를 직접 여는 <code>play_youtube</code>를 넣었다. 홈 화면의 첫
+        영상은 사람마다 달라 서버에서 읽을 수 없어서, 검색어가 없으면 되묻는다.</li>
+      <li><b>로그 파일</b> — 이번에 사용자가 어떤 이름을 말했는지는 기록이 없어 끝내 확인하지 못했다. 에이전트는
+        최소화된 채 자동 시작돼서 콘솔을 볼 일이 없으므로, 받은 명령과 결과를 파일에도 남기게 했다.</li>
+    </ul>
 
     <div class="callout callout-lesson">
       <span class="tag">이 장에서 남은 교훈</span>
