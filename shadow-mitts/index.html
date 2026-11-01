@@ -55,6 +55,14 @@
   .meta-row{ display:flex; flex-wrap:wrap; gap:10px 22px; margin-top:22px; font-size:.9rem; color:var(--text-dim); }
   .meta-row a{ color:var(--text-dim); }
   .meta-row a:hover{ color:var(--accent-strong); }
+  .full-btn{
+    display:inline-flex; flex-wrap:wrap; align-items:baseline; gap:4px 10px; margin-top:20px;
+    padding:11px 20px; border-radius:999px; background:var(--accent-strong); color:var(--surface);
+    font-family:"Gothic A1",sans-serif; font-weight:700; font-size:1rem; box-shadow:var(--shadow);
+    transition:background .15s;
+  }
+  .full-btn .sub{ font-family:"IBM Plex Sans KR",sans-serif; font-weight:500; font-size:.85rem; opacity:.85; }
+  .full-btn:hover{ background:var(--accent); }
 
   .badge-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
   .badge{ background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px 16px; box-shadow:var(--shadow); }
@@ -114,8 +122,8 @@
     <div class="meta-row">
       <span>이메일 <a class="link-line" href="mailto:khchan04@naver.com">khchan04@naver.com</a></span>
       <span>GitHub <a class="link-line" href="https://github.com/kheechan04" target="_blank" rel="noopener">github.com/kheechan04</a></span>
-      <span>전체 시행착오 기록 <a class="link-line" href="full.html">개인 기록용 포트폴리오 →</a></span>
     </div>
+    <a class="full-btn" href="full.html">전체 시행착오 기록 보기<span class="sub">개인 기록용 포트폴리오 →</span></a>
     <div class="badge-row">
       <div class="badge"><div class="v">94%</div><div class="l">녹화 175펀치 중 친 손·시점 인식</div></div>
       <div class="badge"><div class="v">27 → 60fps</div><div class="l">게임 화면 (포즈 추론을 Web Worker로 분리)</div></div>

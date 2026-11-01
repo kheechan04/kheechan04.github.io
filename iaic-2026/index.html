@@ -57,6 +57,14 @@
   .meta-row b{ color:var(--text); }
   .meta-row a{ color:var(--text-dim); }
   .meta-row a:hover{ color:var(--accent-strong); }
+  .full-btn{
+    display:inline-flex; flex-wrap:wrap; align-items:baseline; gap:4px 10px; margin-top:20px;
+    padding:11px 20px; border-radius:999px; background:var(--accent-strong); color:var(--surface);
+    font-family:"Gothic A1",sans-serif; font-weight:700; font-size:1rem; box-shadow:var(--shadow);
+    transition:background .15s;
+  }
+  .full-btn .sub{ font-family:"IBM Plex Sans KR",sans-serif; font-weight:500; font-size:.85rem; opacity:.85; }
+  .full-btn:hover{ background:var(--accent); }
 
   .badge-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
   .badge{ background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px 16px; box-shadow:var(--shadow); }
@@ -119,8 +127,8 @@
     <div class="meta-row">
       <span>이메일 <a class="link-line" href="mailto:khchan04@naver.com">khchan04@naver.com</a></span>
       <span>GitHub <a class="link-line" href="https://github.com/kheechan04" target="_blank" rel="noopener">github.com/kheechan04</a></span>
-      <span>전체 시행착오 기록 <a class="link-line" href="full.html">개인 기록용 포트폴리오 →</a></span>
     </div>
+    <a class="full-btn" href="full.html">전체 시행착오 기록 보기<span class="sub">개인 기록용 포트폴리오 →</span></a>
     <div class="badge-row">
       <div class="badge"><div class="v">6 / 41</div><div class="l">팀 최종 순위</div></div>
       <div class="badge"><div class="v">0.4578 → 0.2446</div><div class="l">Ctrl-World 리더보드 점수 (낮을수록 좋음)</div></div>
