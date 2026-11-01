@@ -94,16 +94,14 @@
   .tag{ background:var(--tag-bg); color:var(--tag-text); font-family:"IBM Plex Mono",monospace; font-size:.76rem; padding:5px 11px; border-radius:99px; }
 
   .card-foot{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; border-top:1px solid var(--border); padding-top:18px; }
-  .readmore{ font-weight:600; display:inline-flex; align-items:center; gap:6px; }
-  .readmore::after{ content:"→"; transition:transform .15s; }
-  .readmore:hover::after{ transform:translateX(3px); }
   .repo-link{ font-family:"IBM Plex Mono",monospace; font-size:.82rem; color:var(--text-faint); }
   .repo-link a{ color:var(--text-dim); }
   .demo-link{ font-family:"IBM Plex Mono",monospace; font-size:.82rem; color:var(--text-dim); }
 
   footer{ margin-top:64px; padding-top:28px; border-top:1px solid var(--border); color:var(--text-faint); font-size:.85rem; }
   footer a{ color:var(--text-dim); }
-  footer .full-link{ display:block; margin-top:10px; }
+  footer .full-btn-outline{ margin-top:16px; background:var(--accent-soft); color:var(--accent-ink); border:1px solid var(--accent); box-shadow:none; font-size:.95rem; }
+  footer .full-btn-outline:hover{ background:var(--accent-strong); color:var(--surface); }
 
   @media (max-width:600px){
     .card{ padding:22px; }
@@ -160,7 +158,6 @@
         <span class="tag">Node WebSocket 로컬 에이전트</span>
       </div>
       <div class="card-foot">
-        <a class="readmore" href="full.html">상세 시행착오 기록 보기</a>
         <span class="repo-link">github.com/kheechan04/<a href="https://github.com/kheechan04/jarvischan" target="_blank" rel="noopener">jarvischan</a> (공개 · MIT 라이선스)</span>
       </div>
     </article>
@@ -170,7 +167,7 @@
   <footer>
     <p>직접 쓰려고 만든 비서라 실행 중인 사이트(<a class="link-line" href="https://jarvischan.vercel.app" target="_blank" rel="noopener">jarvischan.vercel.app</a>)는 비밀번호로 보호돼 있고,
       소스 코드는 <a class="link-line" href="https://github.com/kheechan04/jarvischan" target="_blank" rel="noopener">GitHub</a>에 공개돼 있습니다.</p>
-    <a class="full-link link-line" href="full.html">→ Jarvischan 포트폴리오(개인 기록용) 전체 보기</a>
+    <a class="full-btn full-btn-outline" href="full.html">전체 시행착오 기록 보기<span class="sub">개인 기록용 포트폴리오 →</span></a>
   </footer>
 
 </div>

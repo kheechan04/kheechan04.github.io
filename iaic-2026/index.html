@@ -96,9 +96,6 @@
   .tag{ background:var(--tag-bg); color:var(--tag-text); font-family:"IBM Plex Mono",monospace; font-size:.76rem; padding:5px 11px; border-radius:99px; }
 
   .card-foot{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; border-top:1px solid var(--border); padding-top:18px; }
-  .readmore{ font-weight:600; display:inline-flex; align-items:center; gap:6px; }
-  .readmore::after{ content:"→"; transition:transform .15s; }
-  .readmore:hover::after{ transform:translateX(3px); }
   .repo-link{ font-family:"IBM Plex Mono",monospace; font-size:.82rem; color:var(--text-faint); }
   .repo-link a{ color:var(--text-dim); }
 
@@ -108,7 +105,8 @@
 
   footer{ margin-top:64px; padding-top:28px; border-top:1px solid var(--border); color:var(--text-faint); font-size:.85rem; }
   footer a{ color:var(--text-dim); }
-  footer .full-link{ display:block; margin-top:10px; }
+  footer .full-btn-outline{ margin-top:16px; background:var(--accent-soft); color:var(--accent-ink); border:1px solid var(--accent); box-shadow:none; font-size:.95rem; }
+  footer .full-btn-outline:hover{ background:var(--accent-strong); color:var(--surface); }
 
   @media (max-width:600px){
     .card{ padding:22px; }
@@ -161,7 +159,6 @@
         <span class="tag">RunPod</span><span class="tag">HuggingFace Hub</span>
       </div>
       <div class="card-foot">
-        <a class="readmore" href="full.html">상세 시행착오 기록 보기</a>
         <span class="repo-link">github.com/kheechan04/ctrl-world-iaic (비공개)</span>
       </div>
     </article>
@@ -188,7 +185,6 @@
         <span class="tag">Optical Flow</span><span class="tag">TensorBoard</span>
       </div>
       <div class="card-foot">
-        <a class="readmore" href="full.html">상세 시행착오 기록 보기</a>
         <span class="repo-link">github.com/kheechan04/iaic-noar-big-t-flow (비공개)</span>
       </div>
     </article>
@@ -199,7 +195,7 @@
     <p>두 작업 모두 2026 인하 인공지능 챌린지(로봇 미래 행동 영상 생성)에 4인 팀으로 참가해 제가 맡은 부분입니다.
       순위는 팀 전체의 결과이며, 팀 구성과 트랙별 진행 상황은 상세 기록에 정리했습니다.
       구현과 원인 추적에는 Claude Code(AI 코딩 도구)를 함께 썼고, 실험 방향과 최종 설정은 제가 정했습니다.</p>
-    <a class="full-link link-line" href="full.html" >→ 2026 인하 인공지능 챌린지 포트폴리오(개인 기록용) 전체 보기</a>
+    <a class="full-btn full-btn-outline" href="full.html">전체 시행착오 기록 보기<span class="sub">개인 기록용 포트폴리오 →</span></a>
   </footer>
 
 </div>
