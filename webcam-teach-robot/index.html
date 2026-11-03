@@ -122,7 +122,7 @@
     </div>
     <a class="full-btn" href="full.html">전체 시행착오 기록 보기<span class="sub">개인 기록용 포트폴리오 →</span></a>
     <div class="badge-row">
-      <div class="badge"><div class="v">−17%p</div><div class="l">충분히 학습해도 남는 웹캠 시범의 손해</div></div>
+      <div class="badge"><div class="v">−17%p</div><div class="l">같은 10만 스텝에서 웹캠 시범의 손해</div></div>
       <div class="badge"><div class="v">88 → 59</div><div class="l">깊이 오차만 0 → 2배로 키웠을 때 성공 (사람 없이)</div></div>
       <div class="badge"><div class="v">270</div><div class="l">직접 녹화한 웹캠 시범 (조건 가림)</div></div>
     </div>
@@ -141,10 +141,10 @@
       </p>
       <figure class="shot">
         <img src="img/final-results.png" alt="2만 스텝과 10만 스텝 학습의 조건별 성공. 10만 스텝에서 스크립트 93, 마커 85, 보정 84, 웹캠 77." width="1080" height="1080" loading="lazy">
-        <figcaption>같은 시범, 학습량만 다름. 처음 보는 배치 100개, 시드 3~5개 평균.</figcaption>
+        <figcaption>같은 시범, 학습 스텝만 다름. 처음 보는 배치 100개, 시드 3~5개 평균.</figcaption>
       </figure>
       <ul class="highlights">
-        <li>첫 결과(웹캠 손해 33%p)를 의심해 학습량을 맞추고 모든 조건을 같은 10만 스텝으로 다시 학습 → 손해는 <b>약 17%p</b>. 대부분은 시범이 길어 덜 배운 탓이었음.</li>
+        <li>첫 결과(웹캠 손해 33%p)를 의심해 모든 조건을 같은 10만 스텝으로 다시 학습 → 손해는 <b>약 17%p</b>. 시범이 길어 덜 배운 탓이 컸음. 에폭을 비슷하게 맞추면 약 4%p로 0과 구별되지 않지만(구간 −14 ~ +6), 학습 스텝이 다섯 배 듦.</li>
         <li>같은 조종 코드에 깊이 오차만 넣고 빼자 모든 시드에서 손해, 오차를 키울수록 하락(88 → 59) — 깊이 오차가 원인임을 확인.</li>
         <li>"사람이 화면을 보며 바로잡는 과정도 원인 아닐까?"라는 의문에서 손목 마커 조건을 추가해, 손해를 깊이 약 9%p(경계선)와 사람 시범 특성 약 7%p로 나눔.</li>
         <li>손 자세 보정은 옮기기에서 +7.8%p(시드 5개 모두)였지만, 녹화 전에 계획을 고정한 쌓기 재현에서 −8.2%p — <b>"재현 안 됨"으로 그대로 보고</b>. 쌓기에선 보정이 측정 범위 밖의 손 위치에서 쓰였음(사후 분석).</li>
